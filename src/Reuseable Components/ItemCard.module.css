@@ -1,0 +1,39 @@
+.card {
+  margin-bottom: 30px;
+  margin-left: 20px;
+  border: none;
+  font-family: var(--font-1);
+}
+
+.card:hover {
+  border-radius: 0px;
+}
+.heart {
+  display: none;
+}
+
+.card:hover .heart {
+  display: block;
+}
+.Item_title {
+  font-family: var(--font-Calistoga--1);
+  font-weight: 500 !important;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.text_div {
+  height: 30px;
+}
+
+.wish {
+  border-radius: 5px;
+  font-size: 2rem;
+}
+
+@media (max-width: 632px) {
+  .card {
+    margin-left: 0px;
+  }
+}

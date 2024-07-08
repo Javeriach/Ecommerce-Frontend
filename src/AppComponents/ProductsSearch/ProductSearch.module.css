@@ -1,0 +1,7 @@
+.title {
+  font-family: var(--font-Calistoga--1);
+}
+.input {
+  outline: none;
+  font-size: 1.2rem;
+}

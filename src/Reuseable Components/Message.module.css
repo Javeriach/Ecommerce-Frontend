@@ -1,0 +1,17 @@
+.message_section {
+  position: fixed;
+  z-index: 1000;
+  align-self: center;
+  top: 10%;
+}
+
+.message {
+  background-color: white;
+  border-radius: 5px;
+  font-size: 1.1rem !important;
+  padding: 5px 20px;
+  color: black;
+  box-shadow: 0px 3px 5px -3px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 3px 5px -3px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 3px 5px -3px rgba(0, 0, 0, 0.75);
+}

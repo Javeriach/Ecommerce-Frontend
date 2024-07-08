@@ -1,0 +1,20 @@
+.AddCategory {
+  background-color: var(--color-skyBlue);
+  padding: 20px 40px;
+  border-radius: 10px;
+  color: black;
+}
+
+.heading {
+  font-family: var(--font-Calistoga--1);
+  font-size: 2rem;
+  text-align: center;
+}
+
+.CategoryNameInput {
+  width: 280px;
+  height: 40px;
+  border-radius: 5px;
+  padding-left: 10px;
+  border: 1px solid rgb(103, 103, 103);
+}

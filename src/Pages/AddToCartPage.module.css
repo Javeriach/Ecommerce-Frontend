@@ -1,0 +1,21 @@
+body {
+  background-color: white;
+}
+
+.shoppingCart {
+  font-family: var(--font-1);
+  font-weight: 500;
+  font-size: 2.3rem;
+  margin-top: 20px;
+}
+
+.EmptyCart {
+  width: 500px;
+  height: 290px;
+}
+.TotalAmount {
+  font-size: 1.6rem;
+}
+.TotalPrice {
+  font-size: 1.9rem;
+}

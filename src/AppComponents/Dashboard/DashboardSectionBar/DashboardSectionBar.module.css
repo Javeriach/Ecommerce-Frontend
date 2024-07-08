@@ -1,0 +1,29 @@
+.section3 {
+  width: 100vw;
+}
+
+body {
+  overflow-y: scroll !important;
+}
+
+.section2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: var(--primary);
+  /* overflow-x: scroll; */
+}
+
+.navlink {
+  border: none;
+  font-weight: 500;
+  border-left: 1px solid rgb(84, 83, 83);
+  background-color: #000000;
+  padding: 10px;
+  color: rgb(162, 160, 160);
+  text-align: center;
+}
+
+:global(.active) {
+  border-bottom: 2px solid var(--color-blue--1);
+  color: white !important;
+}

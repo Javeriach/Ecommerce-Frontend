@@ -1,0 +1,30 @@
+.display_Category {
+  min-height: 200px;
+  max-width: auto;
+  width: 100%;
+  padding: 10px 50px;
+  position: relative;
+}
+
+.Categories_heading {
+  font-weight: 600;
+  font-family: var(--font-1);
+  font-weight: 900;
+  font-style: normal;
+  font-size: 3rem;
+}
+.image {
+  height: 200px;
+}
+.card {
+  width: 300px;
+  height: 350px;
+}
+.Carousel {
+  display: flex;
+  justify-content: center;
+  border: 2px solid black;
+}
+:global(.react-multiple-carousel__arrow) {
+  display: none;
+}

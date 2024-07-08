@@ -1,0 +1,139 @@
+* {
+  padding: 0px;
+  margin: 0px;
+}
+
+.navbar {
+  background-color: white;
+  font-size: 20px;
+  margin-bottom: 0px;
+  z-index: 1000;
+  width: 100vw !important;
+  position: fixed;
+  height: 80px;
+}
+
+.innerContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.iconSection {
+  width: 250px;
+}
+
+.navbar_brand {
+  font-family: var(--font-1);
+  font-weight: 500;
+  font-style: normal;
+  position: relative;
+  left: 3%;
+  font-size: 2.4rem;
+  color: black;
+}
+
+.Dropdow {
+  background-color: white !important;
+  unicode-bidi: normal;
+}
+.link_tag {
+  font-family: var(--font-Abril-2);
+  font-size: 1.4rem;
+  text-decoration: none !important;
+  color: black;
+}
+
+.notification {
+  background-color: red;
+  border-radius: 10px;
+  width: 20px;
+  color: white;
+  font-size: 0.9rem;
+  position: absolute;
+  text-decoration: none !important;
+  text-align: center;
+}
+
+.UserDropdown {
+  display: block;
+  /* width: 250px !important; */
+}
+
+.Cart {
+  display: none;
+  text-decoration: none !important;
+  margin-right: 20px;
+}
+
+.nameTogglerSection {
+  width: 300px;
+}
+
+:global(.dropdown-toggle) {
+  background-color: rgb(248, 249, 250) !important;
+  border: none;
+  color: black;
+  margin-top: 10px;
+  margin-right: 10px;
+  padding: 0px !important;
+  font-size: 20px;
+}
+
+:global(.dropdown-toggle:hover) {
+  color: black;
+  border: none;
+}
+
+@media (max-width: 760px) {
+  :global(.fa-user) {
+    font-size: 25px;
+  }
+
+  .iconToggle {
+    height: 40px;
+    width: 45px;
+    margin-top: 10px;
+    font-size: 15px;
+    justify-content: center;
+  }
+  .navTabs {
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 500px) {
+  .nameTogglerSection {
+    width: 70%;
+  }
+
+  .iconToggle {
+    height: 30px;
+    width: 45px;
+    font-size: 15px;
+    margin-top: 10px;
+  }
+
+  .navbar_brand {
+    font-size: 1.9rem;
+  }
+
+  .iconSection {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+  }
+}
+@media (max-width: 380px) {
+  .iconSection {
+    height: 40px;
+  }
+  .navbar {
+    height: 90px !important;
+  }
+  .innerContainer {
+    height: 90px;
+  }
+  .innerContainer {
+    display: flex;
+    flex-direction: column;
+  }
+}

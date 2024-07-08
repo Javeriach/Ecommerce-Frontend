@@ -1,0 +1,61 @@
+.login_section {
+  padding: 0px;
+}
+
+/* Glassmorphism card effect */
+.card {
+  border-radius: 12px;
+  border: 1px solid rgba(9, 9, 9, 0.43);
+  background-color: white;
+  color: black;
+
+  border-radius: 7px;
+  font-weight: 500;
+}
+
+.heading {
+  font-weight: 700;
+  letter-spacing: 0px;
+  font-style: normal;
+  font-size: 35px;
+  color: black;
+}
+
+.fontsize1 {
+  margin-top: 5px;
+  font-size: 1rem;
+  color: rgb(248, 248, 248);
+}
+
+.dosisFOnt {
+  font-family: var(--font-dosis);
+  font-size: 1.2rem;
+}
+
+.login_section {
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card input {
+  width: 280px;
+  height: 50px;
+  border-radius: 7px;
+  padding-left: 10px;
+  margin-top: 10px;
+  font-weight: 500;
+  color: black;
+  border: 2px solid rgb(126, 126, 126);
+}
+
+.signUpBtn {
+  border: none;
+  color: white;
+  font-weight: 500;
+  border-radius: 5px;
+  height: 40px;
+  font-size: 1rem;
+  width: 280px;
+}

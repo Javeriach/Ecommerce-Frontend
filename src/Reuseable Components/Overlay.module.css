@@ -1,0 +1,17 @@
+.Overlay_section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+.Overlay {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  position: absolute;
+  opacity: 0.6;
+}
+.OverlayMaterial {
+  z-index: 1000;
+}

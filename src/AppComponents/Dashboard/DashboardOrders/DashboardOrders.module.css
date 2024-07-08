@@ -1,0 +1,25 @@
+.tablewrapper {
+  height: 80vh;
+  overflow: scroll;
+}
+
+/* html,
+body {
+  overflow: hidden !important;
+} */
+
+.table {
+  overflow: hidden !important;
+  font-size: 20px;
+  width: 100vw !important;
+  height: auto;
+  font-family: var(--font-ubuntu-3);
+  padding-left: 10px !important;
+  font-size: 0.9rem;
+}
+
+.noProduct {
+  font-family: var(--font-Calistoga--1);
+  color: black;
+  font-size: 2rem;
+}

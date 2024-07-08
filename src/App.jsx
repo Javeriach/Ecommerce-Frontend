@@ -1,0 +1,93 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
+import { EShopDataProvider } from './Contexts/EShopDataProvider';
+import { Authenticator } from './Contexts/Authenticator';
+import { useCartStorage } from './Contexts/ShoppingCart';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Modal, Button } from 'bootstrap';
+import './App.css';
+import HomePage from './Pages/HomePage';
+import ProductsDetails from './Pages/ProductsDetails';
+import AddToCartPage from './Pages/AddToCartPage';
+import LoginPage from './Pages/LoginPage';
+import CatogoryStore from './Pages/CatogoryStore';
+import Dashboard from './Pages/DashboardPage/Dashboard';
+import DashboardProducts from './AppComponents/Dashboard/DashboardProducts/DashboardProducts';
+import DashboardUsers from './AppComponents/Dashboard/DashboardUsers/DashboardUsers';
+import DashboardOrders from './AppComponents/Dashboard/DashboardOrders/DashboardOrders';
+import { ShoppingCart } from './Contexts/ShoppingCart';
+import Cancel from './Pages/Cancel';
+import Sucess from './Pages/Sucess';
+import WishlistPage from './Pages/WishlistPage';
+import SignUpPage from './Pages/SignUpPage';
+import AppParentRouter from './Pages/AppParentRouter/AppParentRouter';
+import { OrdersUsersContext } from './Contexts/OrdersUsersContext';
+
+function App() {
+  return (
+    <Authenticator>
+      <EShopDataProvider>
+        <ShoppingCart>
+          <OrdersUsersContext>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<AppParentRouter />}>
+                  <Route path="/" index element={<HomePage />} />
+
+                  <Route
+                    path="/Categories/:category"
+                    element={<CatogoryStore />}
+                  />
+
+                  <Route
+                    path="/Categories/:category/Products"
+                    element={<ProductsDetails />}
+                  />
+
+                  {/* Latest Products route */}
+
+                  <Route path="/latestProducts" element={<ProductsDetails />} />
+                  <Route
+                    path="/wishlist/ProductDetails"
+                    element={<ProductsDetails />}
+                  />
+
+                  <Route path="/AddToCart" element={<AddToCartPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/signup" element={<SignUpPage />}></Route>
+
+                  <Route
+                    path="/ProductDetails"
+                    element={<ProductsDetails />}
+                  ></Route>
+                  <Route path="/cancel" element={<Cancel />} />
+                  <Route path={`/success`} element={<Sucess />} />
+                  <Route path="/wishlist" element={<WishlistPage />}></Route>
+                </Route>
+
+                <Route path="/Admin-Dashboard" element={<Dashboard />}>
+                  <Route
+                    path="/Admin-Dashboard/Products"
+                    index
+                    element={<DashboardProducts />}
+                  ></Route>
+                  <Route
+                    path="/Admin-Dashboard/Users"
+                    element={<DashboardUsers />}
+                  ></Route>
+                  <Route
+                    path="/Admin-Dashboard/Orders"
+                    element={<DashboardOrders />}
+                  ></Route>
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </OrdersUsersContext>
+        </ShoppingCart>
+      </EShopDataProvider>
+    </Authenticator>
+  );
+}
+
+export default App;

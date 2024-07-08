@@ -1,0 +1,115 @@
+.section {
+  height: 100vh;
+  overflow: hidden !important;
+}
+
+body {
+  overflow: hidden;
+}
+.dashboard {
+  position: absolute;
+  height: 100vh;
+  overflow: hidden;
+}
+.navbar {
+  background-color: var(--color-skyBlue);
+  width: 100vw;
+  color: black;
+}
+
+.headingStyling {
+  font-size: 1.8rem;
+}
+
+.dashboardHeading {
+  font-family: var(--font-1);
+  font-weight: 700;
+}
+
+.brandName {
+  font-family: var(--font-1);
+  font-weight: 500;
+  font-size: 2.5rem !important;
+  text-decoration: none;
+  color: black !important;
+}
+
+.tabs_section {
+  width: 320px !important;
+}
+.CrudSection {
+  display: flex;
+  flex-direction: column;
+  height: 50px !important;
+}
+
+.CrudSection div {
+  display: flex;
+  justify-content: center;
+}
+
+.CrudSection b {
+  font-size: 0.8rem;
+}
+
+.CrudSection div img {
+  display: block;
+  width: 25px;
+  height: 25px;
+}
+
+.alertBox {
+  display: none;
+}
+@media (max-width: 1000px) {
+  .desktopView {
+    display: none;
+  }
+  .alertBox {
+    display: block;
+  }
+
+  .brandName {
+    width: 100%;
+    text-align: center;
+  }
+  .HeadingToggleBtn {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+@media (max-width: 760px) {
+  .CrudSection {
+    flex-direction: row;
+    width: auto;
+  }
+
+  .CrudSection b {
+    margin-left: 10px;
+  }
+
+  .CrudSection div {
+    display: block;
+  }
+
+  .dashboardHeading {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .brandWidth {
+    width: 71vw;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .navbar_layout {
+    display: flex;
+    flex-direction: column !important;
+  }
+}
