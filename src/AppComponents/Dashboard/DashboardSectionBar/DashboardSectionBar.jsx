@@ -7,7 +7,7 @@ function DashboardSectionBar() {
     <div className="w-100">
       <div className={`${Styles.section2}`}>
       
-          <NavLink to="/Admin-Dashboard/Products" className={`text-decoration-none  ${Styles.navlink} text-secondary`}>Products</NavLink>
+          <NavLink to="/Admin-Dashboard" className={`text-decoration-none  ${Styles.navlink} text-secondary`}>Products</NavLink>
         
               
         

@@ -2,14 +2,23 @@ import { Link } from 'react-router-dom';
 import Overlay from '../../Reuseable Components/Overlay/Overlay';
 import Styles from './LandingPage.module.css';
 import HomePage from '../../Images/HomePage.png';
+import Aos from 'aos';
+import { useEffect } from 'react';
+
+
 function LandingPage() {
+  useEffect(() =>
+  {
+    Aos.init({ duration: 1000 });
+  }, [])
+  
   return (
     <div
-      className={`${Styles.landingPage} md:h-auto grid grid-cols-2 items-center content-between md:gap-[100px]`}
+      className={`${Styles.landingPage} mb-10 md:h-auto grid grid-cols-2 items-center content-between md:gap-[100px]`}
     >
       {/* text */}
-      <div className={`${Styles.text_Area} ${Styles.robotFont}`}>
-        <div className={`${Styles.text_Area_CoreSection} font-[500]`}>
+      <div className={`${Styles.text_Area} ${Styles.robotFont} mb-4`}>
+        <div  data-aos="fade-down" className={`${Styles.text_Area_CoreSection} font-[500]`}>
           <p className="mb-0">50% Off Winter Super Sale</p>
 
           <label htmlFor="" className="text-[30px] md:text-[60px]">
@@ -32,7 +41,8 @@ function LandingPage() {
 
       <div className={` ${Styles.image_section} mr-3 flex justify-content-end`}>
         <img
-          className="items-center bg-center w-full  h-full "
+          data-aos="fade-down"
+          className="items-center bg-center   h-full md:h-[60%] "
           src={HomePage}
         />
       </div>

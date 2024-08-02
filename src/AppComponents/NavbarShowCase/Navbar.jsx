@@ -21,6 +21,7 @@ import { useAuthenticator } from '../../Contexts/Authenticator';
 import { useCartStorage } from '../../Contexts/ShoppingCart';
 import ProductSearch from '@/AppComponents/ProductsSearch/ProductSearch';
 import ESLogo from '../../Images/ESLogo.png';
+import Aos from 'aos';
 
 function NavbarShowCase() {
   let { addToCartList, wishlist } = useCartStorage();
@@ -29,6 +30,12 @@ function NavbarShowCase() {
   let [toggleDropDown, setToggleDropDown] = useState(false);
   let dropdownBtnRef = useRef();
   let navigate = useNavigate();
+  
+  useEffect(() =>
+    {
+      Aos.init({ duration: 200 });
+    }, [])
+    
   // --------Handlers
   let LogoutHandler = async (e) => {
     e.preventDefault();
@@ -176,6 +183,7 @@ function NavbarShowCase() {
       {/* --------------for small screens side bar menu*/}
       {navDialogue && (
         <div
+          data-aos="fade-right"
           className=" fixed bg-white inset-0 z-[1000] p-3  md:hidden "
           onClick={() => setNavDialogue(false)}
         >
@@ -201,7 +209,7 @@ function NavbarShowCase() {
             </button>
           </div>
           {/* -----------menu */}
-          <div className="mt-6">
+          <div className="mt-6" >
             <Link
               className="font-medium cursor-pointer m-1 p-3 py-2 flex items-center justify-between hover:bg-gray-50 rounded-lg"
               to="/"

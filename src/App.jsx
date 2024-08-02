@@ -1,4 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import Aos from 'aos';
+import "aos/dist/aos.css";
 
 import { EShopDataProvider } from './Contexts/EShopDataProvider';
 import { Authenticator } from './Contexts/Authenticator';
@@ -80,7 +82,6 @@ function App() {
                 </ProtectedRoute>
               }>
                     <Route
-                      path="/Admin-Dashboard/Products"
                       index
                       element={<DashboardProducts />}
                     ></Route>

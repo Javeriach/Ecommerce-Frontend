@@ -56,7 +56,6 @@ function AddProducts({ setShowOverlay }) {
   let AddProductCorrdinator = async () => {
 
     setitemWrittenMessage("");
-
     if (elementToUpdate?.name) {
       try {
         setLoading(true);
@@ -108,6 +107,7 @@ function AddProducts({ setShowOverlay }) {
         {/* Name */}
         <label htmlFor="">Product Name</label> <br />
         <input
+          required
           className="ps-2"
           type="text"
           value={name}
@@ -117,6 +117,7 @@ function AddProducts({ setShowOverlay }) {
         <div className="mt-1">
           <label htmlFor="">Product Description</label> <br />
           <textarea
+            required
             onChange={(e) =>
               dispatch({ type: 'description', payLoad: e.target.value })
             }
@@ -150,7 +151,7 @@ function AddProducts({ setShowOverlay }) {
                     ))}
                   </select>
                 ) : (
-                  <input
+                    <input
                     onChange={(e) =>
                       dispatch({ type: 'category', payLoad: e.target.value })
                     }
@@ -167,6 +168,7 @@ function AddProducts({ setShowOverlay }) {
               <td>
                 {' '}
                 <input
+                  required
                   value={price}
                   type="text"
                   className={`${Style.input} `}
@@ -183,6 +185,7 @@ function AddProducts({ setShowOverlay }) {
               </td>
               <td>
                 <input
+                  required
                   value={rating}
                   type='number'
                   className={`${Style.input} `}
@@ -212,7 +215,9 @@ function AddProducts({ setShowOverlay }) {
           </label>
 
           {!elementToUpdate?.name && (
+            
             <input
+            required
               type="file"
               onChange={(e) =>
                 dispatch({ type: 'image', payLoad: e.target.files })
