@@ -1,6 +1,7 @@
 import { fireDatabase } from '@/Config/Config-firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { useReducer, useContext, createContext } from 'react';
+import toast from 'react-hot-toast';
 
 let OrdersUsersManager = createContext();
 
@@ -52,10 +53,9 @@ function OrdersUsersContext({ children }) {
     
       
       dispatch({ type: 'dashboardOrders', payLoad: filteredData });
-      console.log("ehhhhhhhhhhhhhhh");
     } catch (err) {
       console.log(err.code);
-      dispatch({ type: 'message', payLoad: 'Orders Fetching failed' });
+      toast.error(`Orders Fetching failed`);
       dispatch({ type: 'error', payLoad: {type:'dashboardOrders',errorText:"Dashboard fetching failed"}});
       throw new Error('Error while fetching Orders');
     } finally {

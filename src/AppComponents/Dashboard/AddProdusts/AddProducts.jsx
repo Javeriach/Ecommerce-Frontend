@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useState } from 'react';
 import Style from './AddProducts.module.css';
-import Buttons from '@/Reuseable Components/Buttons';
+import Buttons from '@/Reuseable Components/Buttons/Buttons';
 import { useEShopData } from '@/Contexts/EShopDataProvider';
 import { v4 } from 'uuid';
 import { Spinner } from 'react-bootstrap';

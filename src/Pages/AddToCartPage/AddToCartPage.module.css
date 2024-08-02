@@ -1,0 +1,10 @@
+.EmptyCart {
+  width: 500px;
+  height: 290px;
+}
+.TotalAmount {
+  font-size: 1.6rem;
+}
+.TotalPrice {
+  font-size: 1.9rem;
+}

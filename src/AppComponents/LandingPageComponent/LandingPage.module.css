@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Calistoga&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Spirax&display=swap');
+
+.landingPage {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  background-color: #ef1879;
+}
+
+.homePage {
+  height: 100vh;
+  width: 100vw;
+  background-repeat: no-repeat;
+}
+
+.overlayHomePage {
+  background-color: black;
+  opacity: 0.4;
+  width: 100%;
+  height: 100%;
+  position: absolute !important;
+  /* z-index: -1; */
+}
+
+.LogoutDiv {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  right: 2%;
+}
+
+.manImage {
+  width: 500px;
+  height: 600px;
+  position: relative;
+  top: 0%;
+}
+
+.robotFont {
+  font-family: var(--font-1);
+}
+
+.text_Area_CoreSection {
+  font-family: var(--font-1);
+  position: relative;
+  top: 20%;
+  left: 10%;
+}
+
+.image_section {
+  margin-top: 10px;
+}
+
+@media (max-width: 760px) {
+  .landingPage {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .text_Area {
+    height: 300px;
+    /* margin-left: 20px; */
+    display: flex;
+  }
+
+  .text_Area_CoreSection {
+    position: relative;
+    top: 5%;
+    left: 2%;
+  }
+  .image_section {
+    display: flex;
+    justify-content: center;
+  }
+
+  .manImage {
+    top: 0%;
+    left: 0%;
+  }
+}

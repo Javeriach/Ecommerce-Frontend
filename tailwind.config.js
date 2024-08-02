@@ -26,6 +26,8 @@ module.exports = {
     extend: {
       colors: {
         navyBlue: '#082f49',
+        darkPink: '#ef1879',
+        lightPink: '#fe369a',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

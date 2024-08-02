@@ -3,11 +3,6 @@
   overflow: scroll;
 }
 
-/* html,
-body {
-  overflow: hidden !important;
-} */
-
 .table {
   overflow: hidden !important;
   font-size: 20px;

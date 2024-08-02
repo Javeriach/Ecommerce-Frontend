@@ -1,8 +1,7 @@
 import { useURLParams } from '@/CustomHooks/useURLParams';
-import Styles from './RelatedProducts.module.css';
 import { useEShopData } from '@/Contexts/EShopDataProvider';
 import { useEffect, useState } from 'react';
-import LatestProducts from '@/Components/LatestProducts';
+import LatestProducts from '@/AppComponents/ProductsCardContainer/LatestProducts';
 import ItemCardSkeleton from '../ItemCardSkeleton/ItemCardSkeleton';
 
 function RelatedProducts() {
@@ -32,7 +31,7 @@ function RelatedProducts() {
       {isLoading ? (
         <>
           <label
-            className={`${Styles.heading} w-[100%]  mt-6 text-4xl text-center`}
+            className={` w-[100%]  mt-6 text-4xl text-center`}
           >
             Related Products
           </label>
@@ -41,7 +40,7 @@ function RelatedProducts() {
       ) : !isLoading && filteredData.length ? (
         <>
           <label
-            className={`${Styles.heading} w-[100%]  mt-6 text-4xl text-center`}
+            className={` w-[100%]  mt-6 text-4xl text-center`}
           >
             Related Products
           </label>

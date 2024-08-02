@@ -37,6 +37,7 @@
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
+    "react-hot-toast": "^2.4.1",
     "react-multi-carousel": "^2.8.5",
     "react-router-dom": "^6.23.0",
     "stripe": "^15.12.0",

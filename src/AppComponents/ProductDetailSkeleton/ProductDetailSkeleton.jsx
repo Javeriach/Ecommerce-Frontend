@@ -2,35 +2,52 @@ import { Skeleton } from '@/Components/ui/skeleton';
 
 function ProductDetailSkeleton() {
   return (
-    <div className="w-screen flex content-center justify-center">
-      <div className="w-[90%]  flex flex-col  w-[800px] lg:flex-row justify-center items-center h-auto ">
-        {/* First box */}
-        <Skeleton className={`md:w-[40%]  w-[100%] h-[300px] md:mr-[20px] `} />
+    <div className="p-3 md:p-5 flex  flex-col md:flex-row md:gap-6">
+      {/* =========Images Section */}
+      <div
+        className={`w-[auto] mt-2  border-0 rounded  flex flex-col justify-center`}
+      >
+        <Skeleton
+          className={`w-[300px] h-[300px] min-[400px]:w-[390px] min-[400px]:h-[400px] bg-gray-400  md:w-[500px]  md:h-[500px]`}
+        />
 
-        {/* second box=====Products Details */}
-
-        <div
-          className={
-            'py-4 md:w-[45%]  w-[100%] h-[400px] ms-1  md:mt-12 items-center  md:items-around items-center flex flex-col'
-          }
-        >
-          <div className='w-[100%]'>
-            <Skeleton className={'w-[60%] h-[30px] mt-1'} /> {/* heading  */}
-            <Skeleton className={'w-[80%] h-[120px] mt-1'} />{' '}
-            {/* description */}
-            <div>
-              {' '}
-              {/* category--price ---quatity */}
-              <Skeleton className={'w-[50%] h-[20px] mt-1 '} />
-              <Skeleton className={'w-[50%]  h-[20px] mt-1 '} />
-              <Skeleton className={'w-[50%]  h-[20px] mt-1 '} />
-            </div>
-            <div className=" flex w-64 flex-wrap h-2 mt-1">
-              <Skeleton className={'w-[50px] h-[30px] '} />
-              <Skeleton className={'w-[50px] h-[30px] ml-[25px]'} />
-            </div>
-          </div>
+        <div className={`flex  w-[auto] gap-2 mt-3`}>
+          <Skeleton className={`w-[80px] h-[70px]  md:w-[110px] md:h-[100px] bg-gray-400  rounded-none`} />
+          <Skeleton className={`w-[80px] h-[70px]  md:w-[110px] md:h-[100px]  bg-gray-400 rounded-none`} />
+          <Skeleton className={`w-[80px] h-[70px]  md:w-[110px] md:h-[100px]  bg-gray-400 rounded-none`} />
         </div>
+      </div>
+
+      {/* Products Details */}
+      <div className={`w-[100%] md:w-[60%] mt-4 md:mt-0 `}>
+        <Skeleton className={` text-[30px] md:text-[40px] text-center w-[300px] h-[40px] bg-gray-400 rounded-none`}>
+         
+        </Skeleton>
+
+        <div>
+          <ul className="mt-2  md:p-0">
+            <Skeleton className=" bg-gray-400 flex  w-[250px] h-[40px] mt-1 rounded-none ">
+            </Skeleton>
+
+            <Skeleton className={ `bg-gray-400 flex  w-[250px] h-[40px] mt-1 rounded-none`}>
+             
+            </Skeleton>
+
+            <Skeleton className={ `bg-gray-400 flex  w-[250px] h-[40px] mt-1  rounded-none`}>
+              
+            </Skeleton>
+          </ul>
+        </div>
+        <div>
+         
+        </div>
+
+        <Skeleton
+          className="bg-gray-400 mt-[20px]  w-[100%] h-[40px]  rounded-none"
+
+        >
+
+        </Skeleton>
       </div>
     </div>
   );

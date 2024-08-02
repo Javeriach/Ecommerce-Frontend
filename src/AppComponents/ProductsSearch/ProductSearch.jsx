@@ -1,5 +1,8 @@
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import SearchIcon from '@mui/icons-material/Search';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
+import { Link } from 'react-router-dom';
 
 import Styles from './ProductSearch.module.css';
 import {
@@ -17,17 +20,17 @@ import {
 
 import { useEShopData } from '@/Contexts/EShopDataProvider';
 import { useEffect, useState } from 'react';
-import LatestProducts from '@/Components/LatestProducts';
-import ItemCard from '@/Reuseable Components/ItemCard';
+import SearchedSingleItem from './SearchedSingleItem';
 
 function ProductSearch() {
-  let { EshopData } = useEShopData();
+  let { EshopData, SearchedProductsSetter } = useEShopData();
   let [itemToSearch, setItemToSearch] = useState('');
-
   let [filteredData, setFilteredData] = useState([]);
+  let [displayItems, setDisplayItems] = useState([]);
 
   useEffect(() => {
     if (!itemToSearch) {
+      setDisplayItems([]);
       setFilteredData([]);
       return;
     }
@@ -37,24 +40,35 @@ function ProductSearch() {
         return item;
     });
 
+    setDisplayItems(data.slice(0, 3));
+    if (data.length > 3) SearchedProductsSetter(data);
     setFilteredData(data);
   }, [itemToSearch]);
 
+
   return (
     <Sheet key={'top'}>
-      <SheetTrigger>
-        <FontAwesomeIcon icon={faMagnifyingGlass} />
+      <SheetTrigger className=' w-full h-full '>
+   
+        <>
+          <SearchIcon sx={{ fontSize: 40 }} />
+        </>
+      
+     
+        {/* <div className='hidden md:block'>
+        <SearchIcon  sx={{ fontSize: 45 }} />
+
+        </div> */}
       </SheetTrigger>
-      <SheetContent className="z-[2000] w-screen" side="top">
+      
+      <SheetContent className="z-[2000] w-full " side="top">
         <SheetHeader>
           <SheetTitle className={`${Styles.title} text-lg text-[30px]`}>
             Search Products
           </SheetTitle>
           <div className="flex">
-            <FontAwesomeIcon
-              className="text-[30px] ml-[20px]"
-              icon={faMagnifyingGlass}
-            />
+            <SearchIcon sx={{ fontSize: 40 }} />
+
             <input
               onChange={(e) => setItemToSearch(e.target.value)}
               value={itemToSearch}
@@ -62,7 +76,7 @@ function ProductSearch() {
               className={`w-[200px] h-8 border-[0px] border-l-2 border-l-black ml-2 pl-2 ${Styles.input}`}
             />
           </div>
-          <div className="mt-[30px] flex">
+          <div className="mt-[30px] flex flex-col gap-3 overflow-auto h-[400px] md:h-full">
             <hr />
 
             {/* --------------------------------------
@@ -81,10 +95,26 @@ function ProductSearch() {
             )}
 
             {/* Display the products listing */}
-            {filteredData.map((item) => (
-              <ItemCard element={item} />
-            ))}
-                      
+            {displayItems?.length > 0 && (
+              <h4 className="font-medium text-lg">Searched Products</h4>
+            )}
+            {
+              displayItems?.map((item) => (
+              <SearchedSingleItem element={item} />
+            ))
+            }
+
+            {
+              filteredData?.length > 2 && (
+              <div>
+                <Link to={'/AllResults?resultProducts=SearchedProducts'}>
+                  <SheetClose className=" h-[40px] p-2 bg-black text-white w-auto z-30">
+                    View All Results <ArrowRightAltIcon />
+                  </SheetClose>
+                </Link>
+              </div>
+              )
+            }
           </div>
 
           <SheetDescription></SheetDescription>

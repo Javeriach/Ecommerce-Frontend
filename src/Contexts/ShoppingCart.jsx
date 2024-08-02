@@ -20,6 +20,7 @@ import {
 
 import { fireDatabase } from '../Config/Config-firebase';
 import { useAuthenticator } from './Authenticator';
+import toast from 'react-hot-toast';
 
 // ============Shopping Store
 
@@ -89,9 +90,7 @@ let reducer = (state, action) => {
     case 'wishList':
       return { ...state, wishlist: action.payLoad };
 
-    case 'message':
-      return { ...state, message: action.payLoad };
-
+  
     case 'session_url': {
       return { ...state, session_url: action.payLoad };
     }
@@ -113,7 +112,7 @@ function ShoppingCart({ children }) {
     addToCartList: [],
     cartedBuyList: [],
     wishlist: [],
-    message: {},
+  
     session_url: 'http://localhost:5173/success',
     error:{type:'',errorText:''}
   };
@@ -128,7 +127,6 @@ function ShoppingCart({ children }) {
     addToCartList,
     cartedBuyList,
     wishlist,
-    message,
     session_url,
    error
   } = state;
@@ -153,7 +151,6 @@ function ShoppingCart({ children }) {
        result.docs.forEach(item => {
         products.push({ ...item.data(), id: item.id });
        });
-      console.log(products);
       dispatch({ type: 'addToCart', payLoad: products });
 
     } catch (error) {
@@ -172,14 +169,7 @@ function ShoppingCart({ children }) {
     fetchWishlist();
   }, [currentUserDetails]);
 
-  // =======================useEffect to handle the display of message
-  useEffect(() => {
-    setTimeout(() => {
-      if (message?.icon) {
-        dispatch({ type: 'message', payLoad: { icon: '', message: '' } });
-      }
-    }, [2000]);
-  }, [message]);
+  
 
   // ==================================Funtions
   //--------------------- Add to cart handler function
@@ -195,10 +185,7 @@ function ShoppingCart({ children }) {
 
     if (filteredProducts.length)
     {
-      dispatch({
-        type: 'message',
-        payLoad: { icon: 'successMark', message: "Item Already Exist!" },
-      });
+      toast.success(`Item Already Exist!`);
       return;
     }
     let collectionRef = doc(fireDatabase, 'CartedProducts', item.id+currentUserDetails?.id);
@@ -217,17 +204,11 @@ function ShoppingCart({ children }) {
         regularItemId:item.id
       };
       await setDoc(collectionRef, updateditem);
-      dispatch({
-        type: 'message',
-        payLoad: { icon: 'successMark', message: 'Item added to Cart!' },
-      });
+      toast.success(`Item added to Cart!`);
 
       fetchData();
     } catch (error) {
-      dispatch({
-        type: 'message',
-        payLoad: { icon: 'crossMark', message: "Addition to cart failed!" },
-      });
+      toast.error(`Addition to cart failed!`);
       throw new Error(error.message);
     } finally {
       dispatch({ type: 'isLoading', payLoad: false });
@@ -247,20 +228,13 @@ function ShoppingCart({ children }) {
       dispatch({ type: 'isLoading', payLoad: true });
       let docRef = doc(fireDatabase, 'CartedProducts', id);
       await deleteDoc(docRef);
-      dispatch({
-        type: 'message',
-        payLoad: { icon: 'successMark', message: 'Item removed from Cart!' },
-      });
+      toast.success(`Item removed from Cart!`);
 
       fetchData();
     } catch (error) {
-      dispatch({
-        type: 'message',
-        payLoad: {
-          icon: 'crossMark',
-          message: "Item can't be removed from Cart!",
-        },
-      });
+
+      toast.error(`Item can't be removed from Cart!`);
+
       throw new Error(error.message);
     } finally {
       dispatch({ type: 'isLoading', payLoad: false });
@@ -295,6 +269,12 @@ function ShoppingCart({ children }) {
   // ============================Wishlist=============================
 
   async function fetchWishlist() {
+    if (!currentUserDetails?.uid)
+      {
+        dispatch({ type: 'wishList', payLoad:[] });
+        return;
+    }
+    
     let collectionRef = collection(fireDatabase, 'Wishlist');
     let data = query(collectionRef, where('userId', '==', currentUserDetails?.uid));
     const result = await getDocs(data);
@@ -319,10 +299,7 @@ function ShoppingCart({ children }) {
 
     if (filteredProducts.length)
     {
-      dispatch({
-        type: 'message',
-        payLoad: { icon: 'successMark', message: "Item Already Exist in the Wishlist!" },
-      });
+      toast.success(`Item Already Exist in the Wishlist!`);
       return;
     }
     let docRef = doc(fireDatabase, 'Wishlist', id+currentUserDetails?.id);
@@ -331,20 +308,11 @@ function ShoppingCart({ children }) {
     try {
       dispatch({ type: 'isLoading', payLoad: true });
       await setDoc(docRef, { name: name, price: price, image: image, userId: currentUserDetails?.uid,regularItemId:id });
-      dispatch({
-        type: 'message',
-        payLoad: { icon: 'successMark', message: 'Item added to wishlist!' },
-      });
+      toast.success(`Item added to wishlist!`);
 
       fetchWishlist();
     } catch (error) {
-      dispatch({
-        type: 'message',
-        payLoad: {
-          icon: 'crossMark',
-          message: "Addition to Wishlist failed!",
-        },
-      });
+      toast.error(`Addition to Wishlist failed!`);
       throw new Error(error.message);
     } finally {
       dispatch({ type: 'isLoading', payLoad: false });
@@ -357,23 +325,13 @@ function ShoppingCart({ children }) {
     try {
       let docRef = doc(fireDatabase, 'Wishlist', id);
       await deleteDoc(docRef);
-      dispatch({
-        type: 'message',
-        payLoad: {
-          icon: 'successMark',
-          message: 'Item removed from wishlist!',
-        },
-      });
+      toast.success(`Item removed from wishlist!`);
       fetchWishlist();
     } catch (error) {
-      dispatch({
-        type: 'message',
-        payLoad: {
-          icon: 'crossMark',
-          message: "Item can't be removed from wishlist!",
-        },
-      });
+
+      toast.error(`Item can't be removed from wishlist!`);
       throw new Error(error.message);
+
     } finally {
       dispatch({ type: 'isLoading', payLoad: false });
     }
@@ -384,13 +342,10 @@ function ShoppingCart({ children }) {
     try {
      
       if (!Auth?.currentUser?.uid || !Auth?.currentUser?.email)
-       { dispatch({
-          type: 'message',
-          payLoad: {
-            icon: 'crossMark',
-            message: "User must be logined in!!!",
-          },
-        }); return;}
+      {
+        toast.error(`User must be logined in!!!`);
+        return;
+      }
       
       dispatch({ type: 'isLoading', payLoad: true });
       const stripe = await loadStripe(
@@ -419,13 +374,7 @@ function ShoppingCart({ children }) {
       //--------------store the data of the logined user to the localstorage to maintain session
       localStorage.setItem('currentUser', JSON.stringify(currentUserDetails));
       if (!selectedItems.length) {
-        dispatch({
-          type: 'message',
-          payLoad: {
-            icon: 'crossMark',
-            message: "You must have atleast one product in cart to continue!!!"
-          },
-        });
+        toast.error(`You must have atleast one product in cart to continue!!!`);
         return;
       }
       localStorage.setItem('products', JSON.stringify(selectedItems));
@@ -448,13 +397,7 @@ function ShoppingCart({ children }) {
         sessionId: session.id,
       });
     } catch (err) {
-      dispatch({
-        type: 'message',
-        payLoad: {
-          icon: 'crossMark',
-          message: "Some Problem while processing data!!!"
-        },
-      })
+      toast.error(`Some Problem occured while processing data!!!`);
     } finally {
       dispatch({ type: 'isLoading', payLoad: false });
     }
@@ -480,13 +423,7 @@ function ShoppingCart({ children }) {
       localStorage.setItem("products", JSON.stringify([]));
       
       if (!cartedOrderedItems.length) {
-        dispatch({
-          type: 'message',
-          payLoad: {
-            icon: 'crossMark',
-            message: "Some Problem while storing the ordered items"
-          },
-        });
+        toast.error(`Some Problem while storing the ordered items`);
         throw new Error("Orders Products data lost");
       }
     
@@ -504,29 +441,13 @@ function ShoppingCart({ children }) {
       });
 
      
-      dispatch({
-        type: 'message',
-        payLoad: {
-          icon: 'successMark',
-          message: `
-          Products successfully saved!!!`
-        },
-        
-      });
+      toast.success(` Products successfully saved!!!`);
       console.log("Hello called 2nd time");
       
 
     } catch (err) {
       console.log(err.message);
-      dispatch({
-        type: 'message',
-        payLoad: {
-          icon: 'crossMark',
-          message: `
-          Some Problem occured while storing data!!!`
-        },
-        
-      });
+      toast.error(`Some Problem occured while storing data!!!`);
       throw new Error(err.message);
     } finally {
     }
@@ -540,7 +461,6 @@ function ShoppingCart({ children }) {
         cartedBuyList,
         isLoading,
         wishlist,
-        message,
         session_url,
         error,
         // *************Functions

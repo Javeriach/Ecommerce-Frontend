@@ -2,34 +2,40 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { EShopDataProvider } from './Contexts/EShopDataProvider';
 import { Authenticator } from './Contexts/Authenticator';
-import { useCartStorage } from './Contexts/ShoppingCart';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from 'bootstrap';
 import './App.css';
-import HomePage from './Pages/HomePage';
-import ProductsDetails from './Pages/ProductsDetails';
-import AddToCartPage from './Pages/AddToCartPage';
-import LoginPage from './Pages/LoginPage';
-import CatogoryStore from './Pages/CatogoryStore';
+import HomePage from './Pages/HomePage/HomePage';
+import ProductsDetails from './Pages/ProductDetails/ProductsDetails';
+import AddToCartPage from './Pages/AddToCartPage/AddToCartPage';
+import LoginPage from './Pages/LoginPage/LoginPage';
+import CatogoryStore from './Pages/CategoriesStore/CatogoryStore';
 import Dashboard from './Pages/DashboardPage/Dashboard';
 import DashboardProducts from './AppComponents/Dashboard/DashboardProducts/DashboardProducts';
 import DashboardUsers from './AppComponents/Dashboard/DashboardUsers/DashboardUsers';
 import DashboardOrders from './AppComponents/Dashboard/DashboardOrders/DashboardOrders';
 import { ShoppingCart } from './Contexts/ShoppingCart';
-import Cancel from './Pages/Cancel';
-import Sucess from './Pages/Sucess';
-import WishlistPage from './Pages/WishlistPage';
-import SignUpPage from './Pages/SignUpPage';
+import Cancel from './Pages/CancelPaymentPage/Cancel';
+import Sucess from './Pages/SuccessPage/Sucess';
+import WishlistPage from './Pages/WishlistPage/WishlistPage';
+import SignUpPage from './Pages/SignUpPage/SignUpPage';
 import AppParentRouter from './Pages/AppParentRouter/AppParentRouter';
 import { OrdersUsersContext } from './Contexts/OrdersUsersContext';
+import { Toaster } from 'react-hot-toast';
+import AllResultProducts from './Pages/AllResultProducts/AllResultProducts';
+import ProtectedRoute from './ProtectedRoute/ProtectedRoute';
 
 function App() {
-  return (
+ 
+ 
+  
+    return (
     <Authenticator>
       <EShopDataProvider>
         <ShoppingCart>
           <OrdersUsersContext>
+            <Toaster />
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<AppParentRouter />}>
@@ -64,23 +70,30 @@ function App() {
                   <Route path="/cancel" element={<Cancel />} />
                   <Route path={`/success`} element={<Sucess />} />
                   <Route path="/wishlist" element={<WishlistPage />}></Route>
+                  <Route path="/AllResults" element={<AllResultProducts />} />
                 </Route>
 
-                <Route path="/Admin-Dashboard" element={<Dashboard />}>
-                  <Route
-                    path="/Admin-Dashboard/Products"
-                    index
-                    element={<DashboardProducts />}
-                  ></Route>
-                  <Route
-                    path="/Admin-Dashboard/Users"
-                    element={<DashboardUsers />}
-                  ></Route>
-                  <Route
-                    path="/Admin-Dashboard/Orders"
-                    element={<DashboardOrders />}
-                  ></Route>
-                </Route>
+               
+                  <Route path="/Admin-Dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }>
+                    <Route
+                      path="/Admin-Dashboard/Products"
+                      index
+                      element={<DashboardProducts />}
+                    ></Route>
+                    <Route
+                      path="/Admin-Dashboard/Users"
+                      element={<DashboardUsers />}
+                    ></Route>
+                    <Route
+                      path="/Admin-Dashboard/Orders"
+                      element={<DashboardOrders />}
+                    ></Route>
+                  </Route>
+               
               </Routes>
             </BrowserRouter>
           </OrdersUsersContext>

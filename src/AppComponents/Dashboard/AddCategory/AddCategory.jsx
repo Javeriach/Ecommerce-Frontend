@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 // -----------Internal Imports
 import Style from './AddCategory.module.css';
-import Buttons from '@/Reuseable Components/Buttons';
+import Buttons from '@/Reuseable Components/Buttons/Buttons';
 import { useEShopData } from '@/Contexts/EShopDataProvider';
 // import Spinner from "../../Reuseable Components/Spinner/Spinner";
 import { Spinner } from 'react-bootstrap';

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useReducer, useState } from 'react';
-
+import toast from 'react-hot-toast';
 // ------------------Firebase Imports
 
 import { storage } from '../Config/Config-firebase';
@@ -42,7 +42,8 @@ let reducer = (state, action) => {
     
     case 'message':
        return {...state,shoppingStoreMessage:action.payLoad}
-   
+    case 'SearchedProducts':
+      return {...state, SearchedProducts:action.payLoad}
 
     default:
       return state;
@@ -65,11 +66,11 @@ function EShopDataProvider({ children }) {
     cartedBuyList: [],
     CategoryStoreData: [],
     elementToUpdate: {},
-    shoppingStoreMessage:{}
+    SearchedProducts:[]
   };
 
   let [state, dispatch] = useReducer(reducer, initialState);
-  let { elementToUpdate,categories, shoppingStoreMessage,CategoryStoreData, EshopData, isLoading, currentProduct, addToCartList, cartedBuyList, error } = state;
+  let { elementToUpdate,categories,SearchedProducts,CategoryStoreData, EshopData, isLoading, currentProduct, addToCartList, cartedBuyList, error } = state;
   let [showOverlay, setShowOverlay] = useState();
   // ****************************Use Effect*************************
 
@@ -79,17 +80,6 @@ function EShopDataProvider({ children }) {
 
   }, [dispatch]);
   
-
-  useEffect(() => {
-
-    setTimeout(() => {
-      if (shoppingStoreMessage?.icon) {
-        dispatch({ type: 'message', payLoad: { icon: '', message: "" } });
-      }
-
-    }, [2000]);
-
-  }, [shoppingStoreMessage]);
 
 
   async function fetchData() {
@@ -107,7 +97,6 @@ function EShopDataProvider({ children }) {
     
     } catch (err) {
       dispatch({ type: "isLoading", payLoad: false });
-      console.error(err);
 
     } finally {
       dispatch({ type: "isLoading", payLoad: false });
@@ -150,7 +139,7 @@ function EShopDataProvider({ children }) {
     }
     )
     if (categoryFilter.length) {
-      dispatch({ type: 'message', payLoad: { icon: 'successMark', message: "Category Already Exist!" } });
+      toast.success(`Category Already Exist!`);
       return;
     }
 
@@ -166,10 +155,10 @@ function EShopDataProvider({ children }) {
         name: CategoryName,
         imageUrl: url
       });
-      dispatch({ type: 'message', payLoad: { icon: 'successMark', message: "Category added!" } });
+      toast.success(`Category added!`);
       GetCategoriesFromStore();
     } catch (err) {
-      dispatch({ type: 'message', payLoad: { icon: 'crossMark', message: "Category can't be added!" } });
+      toast.error(`Category can't be added!`);
       throw new Error(err.message);
     } 
   }
@@ -199,12 +188,11 @@ function EShopDataProvider({ children }) {
       }
       let singleCategoryCollectionRef = doc(fireDatabase, `Products`, product.id);
       await setDoc(singleCategoryCollectionRef, product);
-      dispatch({ type: 'message', payLoad: { icon: 'successMark', message: "Product added !" } });
+      toast.success(`Product added !`);
 
       fetchData();
     } catch {
-      dispatch({ type: 'message', payLoad: { icon: 'crossMark', message: "Product can't be added! " } });
-
+      toast.error(`Product can't be added!`);
     }
   }
     //--------------------- FUnction to fetch data based on the category
@@ -251,11 +239,10 @@ function EShopDataProvider({ children }) {
 
         await updateDoc(docToUpdate, product);
         fetchData();
-
-        dispatch({ type: 'message', payLoad: { icon: 'successMark', message: "Product updated!" } });
+        toast.success(`Product Updated!!`);
       } catch(error)
       {
-        dispatch({ type: 'message', payLoad: { icon: 'crossMark', message: "Product can't be updated! " } });
+        toast.error(`Some Error occured while Updating Product!!`);
         throw new Error(error.message);
       }
    }
@@ -306,15 +293,21 @@ function EShopDataProvider({ children }) {
 
       let docRef = doc(fireDatabase, 'Products', item.id);
       await deleteDoc(docRef);
-      dispatch({ type: 'message', payLoad: { icon: 'successMark', message: "Product Removed!" } });
+      toast.success(`Product Removed!`);
 
       fetchData();
     }
-    catch {
-      dispatch({ type: 'message', payLoad: { icon: 'crossMark', message: "Product can't be removed!" } });
+    catch(err) {
+
+      toast.error(`Product can't be removed!`);
+      throw new Error(err.message);
 
     }
    }
+  
+   function SearchedProductsSetter(data) {
+    data.length && dispatch({ type: 'SearchedProducts', payLoad: data });
+  }
   
     return (
       <EShopDataContext.Provider
@@ -327,7 +320,8 @@ function EShopDataProvider({ children }) {
           CategoryStoreData,
           elementToUpdate,
           showOverlay,
-          shoppingStoreMessage,
+          SearchedProducts,
+          
           //  =============functioons
           getCategoryData,
           setShowOverlay,
@@ -336,13 +330,15 @@ function EShopDataProvider({ children }) {
           AddProductHandler,
           addCategoryToDB,
           UpdateProductHandler,
-          dispatch
+          dispatch,
+          SearchedProductsSetter
         }}
       >
         {children}
       </EShopDataContext.Provider>
     );
   }
+
 
 function useEShopData() {
   const context = useContext(EShopDataContext);

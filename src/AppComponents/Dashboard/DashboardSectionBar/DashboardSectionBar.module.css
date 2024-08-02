@@ -2,10 +2,6 @@
   width: 100vw;
 }
 
-body {
-  overflow-y: scroll !important;
-}
-
 .section2 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

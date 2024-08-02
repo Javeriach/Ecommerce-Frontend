@@ -1,7 +1,6 @@
 import { useContext, createContext, useState,useEffect } from 'react';
 import {
   Auth,
-  GoogleAuthenticator,
   fireDatabase,
 } from '../Config/Config-firebase';
 
@@ -9,7 +8,6 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  signInWithPopup,
 } from 'firebase/auth';
 
 import { signOut } from 'firebase/auth';
@@ -21,6 +19,7 @@ import {
   query,
   where,
 } from 'firebase/firestore';
+import toast from 'react-hot-toast';
 
 let AuthenticaterContext = createContext(null);
 
@@ -32,25 +31,7 @@ function Authenticator({ children }) {
   let [currentUserDetails, setCurrentUser] = useState({});
   let [userSignup, setUserSignUp] = useState(false);
   
-  let [authMessage, setAuthMessage] = useState({ icon: '', message: '' });
 
-
-  useEffect(() => {
-
-    setTimeout(() => {
-      if (authMessage?.icon) {
-        setAuthMessage({ icon: '', message: "" });
-      }
-
-    }, [2000]);
-
-  }, [authMessage]);
-
-
-  // useEffect(() =>
-  // {
-  //   signOut(Auth);
-  // })
 
   async function maintainUserSession()
   {
@@ -61,13 +42,6 @@ function Authenticator({ children }) {
     {
       setCurrentUser(user);
       if (Auth?.currentUser?.name) return;
-      // try {
-      //   signInWithEmailAndPassword(Auth, user?.email, user?.password);
-
-      // } catch (err)
-      // {
-      //   throw new Error(err.message);
-      // }
       
     }
   }
@@ -130,19 +104,16 @@ function Authenticator({ children }) {
   let signUpHandler = async (fname, lname, email, password) => {
     if (Auth?.currentUser?.email === email)
       {
-        setAuthMessage(
-          {
-            icon: 'crossMark', message: `Your account has already been created and you
-            are logined currently!!!` });
+      toast.success(`Your account has already been created and you
+          are logined currently!!!`);
           
       throw new Error("")
     }
 
     if (Auth?.currentUser?.email)
       {
-        setAuthMessage(
-          {
-            icon: 'crossMark', message: `One User is already login!!! Firstly Logout!!!` });
+        toast.error(`One User is already login!!! Firstly Logout!!!`);
+
             throw new Error("One user is already logged in!!!");
     }
     
@@ -156,7 +127,9 @@ function Authenticator({ children }) {
       let docRef = doc(fireDatabase, 'Users', Auth?.currentUser.uid);
       await setDoc(docRef, { name: fname + ' ' + lname, email: email,date:new Date(),uid:Auth?.currentUser?.uid });
       setAuthLoading(false);
-      setAuthMessage( { icon: 'successMark', message: 'User Created Successfully!Login Now' });
+      // message
+      toast.success(`User Created Successfully!Login Now`);
+      // ---handling local storage
       localStorage.setItem("currentUser", JSON.stringify({}));
       localStorage.setItem("products", JSON.stringify([]));
       signOut(Auth);
@@ -166,15 +139,13 @@ function Authenticator({ children }) {
       
       // error handling
       if (err.code?.includes("auth/email-already-in-use")) {
-        setAuthMessage({ icon: 'crossMark', message: 'User Already Exist' });
+        toast.error(`User Already Exist`);
       }
       else if (err.code?.includes("weak-password")) {
-        setAuthMessage({
-          icon: 'crossMark', message: `Week Password
-          At least 6 characters long` });
+        toast.error(`Week Password At least 6 characters long`);
       }
       else if(err.message != "One user is already logged in!!!"){
-        setAuthMessage({ icon: 'crossMark', message: `Network Connectivity Error` });
+        toast.error(`Network Connectivity Error`);
         
       }
       
@@ -192,15 +163,16 @@ function Authenticator({ children }) {
 
       if (Auth?.currentUser?.email) {
         console.log(Auth?.currentUser.email);
-        setAuthMessage(
-          { icon: 'crossMark', message: `One User is already logined in!` });
+        // message
+        toast.error(`One User is already logined in!`);
+
         throw new Error("One user is already logged in!!!")
       }
       // await setAuthPersistence();
 
       // Loading
       setAuthLoading(true);
-      // singing
+      //------------------ sign -in
       await signInWithEmailAndPassword(Auth, email, password);
       let collectionRef = collection(fireDatabase, 'Users'); //getting the reference of the collection
       let data = query(collectionRef, where('email', '==', email));
@@ -212,26 +184,21 @@ function Authenticator({ children }) {
       }));
     
   
-      console.log(filteredData);
       setCurrentUser(filteredData[0]);
       setAuthLoading(false);
       setVarified(true);
       
       setCurrentUserId(Auth?.currentUser.uid);
-      setAuthMessage(
-       {icon: 'successMark', message: 'Login Successfull!' });
+      toast.success(`Login Successfull!`);
        localStorage.setItem("currentUser", JSON.stringify({}));
           localStorage.setItem("products", JSON.stringify([]));
 
     } catch (err) {
       if (err.code == 'auth/invalid-credential') {
-        setAuthMessage({
-          icon: 'crossMark',
-          message: 'Email or password is not correct'
-        });
+        toast.error(`Email or Password is incorrect`);
+
       } else if(err.message != "One user is already logged in!!!"){
-        setAuthMessage( { icon: 'crossMark', message: 'Login Failed' 
-        });
+        toast.error("Login Failed!");
        
       }
       throw new Error(err.message);
@@ -245,28 +212,34 @@ function Authenticator({ children }) {
   // --------------Logout Handler
 
   let signOutHandler = async () => {
+
+    // ------------clearing the local storage
     localStorage.setItem("currentUser", JSON.stringify({}));
     localStorage.setItem("products", JSON.stringify([]));
 
     try {
       if (!Auth?.currentUser?.email)
         {
-          setAuthMessage(
-          {icon: 'crossMark', message: `No User Logined in!!!` });
+          
+        toast.error(`No User Logined in!!!`);
         return false;
       }
       setAuthLoading(false);
       await signOut(Auth);
       setCurrentUser({});
-      setAuthMessage( { icon: 'successMark', message: 'Logout Successful' });
+      toast.success(`Logout Successfully`);
       return true;
      
     } catch (err) {
-      console.log(err.message);
-      setAuthMessage({ icon: 'crossMark', message: 'Logout  Failed' });
+
+      toast.success(`Logout Failed!`);
+
       throw new Error(err.message);
+
     } finally {
+
       setAuthLoading(false);
+
     }
   };
 
@@ -281,7 +254,7 @@ function Authenticator({ children }) {
         currentUserID,
         userVarified,
         authLoading,
-        authMessage,
+      
       }}
     >
       {children}
@@ -291,10 +264,10 @@ function Authenticator({ children }) {
 
 function useAuthenticator() {
   let context = useContext(AuthenticaterContext);
-
   if (!context) {
     throw new Error("Context api is undefined");
   }
+  console.log(context)
   return context;
 }
 
