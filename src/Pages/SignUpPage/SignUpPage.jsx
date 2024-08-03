@@ -6,7 +6,7 @@ function SignUpPage() {
     return (
         <div >
     
-            <div className="py-[20px]">
+            <div>
 
             <SignUpForm/>
             </div>
