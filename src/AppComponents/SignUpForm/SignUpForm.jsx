@@ -69,7 +69,7 @@ function SignUpForm() {
 
 
   return (
-    <div className={`${styles.login_section} mt-1 pt-3`}>
+    <div className={`${styles.login_section} mt-1 pt-3 pb-[55px]`}>
       <form
         action=""
         className={`text-light ${styles.card} w-[325px]
