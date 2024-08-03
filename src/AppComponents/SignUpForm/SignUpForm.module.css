@@ -33,7 +33,8 @@
 }
 
 .login_section {
-  height: 90vh;
+  height: auto;
+  padding-bottom: 55px;
   display: flex;
   justify-content: center;
   align-items: center;

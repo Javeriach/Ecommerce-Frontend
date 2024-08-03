@@ -33,7 +33,7 @@ function NavbarShowCase() {
   
   useEffect(() =>
     {
-      Aos.init({ duration: 200 });
+      Aos.init({ duration: 100 });
     }, [])
     
   // --------Handlers
@@ -171,7 +171,7 @@ function NavbarShowCase() {
       </div>
 
       {/* ------------------Small screen navbar bar content */}
-      <div className="flex md:hidden h-full justify-center items-center w-[200px] pe-3">
+      <div className="flex md:hidden h-full justify-center items-center w-[100px] ">
         <ProductSearch />
 
         <button className="p-2 " onClick={() => setNavDialogue(true)}>
@@ -239,7 +239,9 @@ function NavbarShowCase() {
             {/* Dashboard */}
 
             <div className="h-[1px] bg-black"></div>
-           { currentUserDetails?.email == "javeriakanwal904@gmail.com" && <Link
+            {currentUserDetails?.email == "javeriakanwal904@gmail.com" &&
+               <>
+              <Link
               className="font-medium cursor-pointer m-1 p-3 py-2  flex items-center justify-between hover:bg-gray-50 rounded-lg"
               to="/Admin-Dashboard"
             >
@@ -249,9 +251,12 @@ function NavbarShowCase() {
               </div>
 
               <ChevronRightIcon sx={{ fontSize: 30 }} />
-            </Link>}
+              </Link>
+                <div className="h-[1px] bg-black"></div>
+             </>
+            }
 
-            <div className="h-[1px] bg-black"></div>
+          
             {/* Wishlist page */}
 
             <Link
