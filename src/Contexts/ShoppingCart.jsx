@@ -381,7 +381,7 @@ function ShoppingCart({ children }) {
 
       // now call the server
       const response = await fetch(
-        'http://localhost:7000/api/create-checkout-session',
+        'https://e-shop-backend-code-yjw9.vercel.app/api/create-checkout-session',
         {
           method: 'POST',
           headers: headers,
