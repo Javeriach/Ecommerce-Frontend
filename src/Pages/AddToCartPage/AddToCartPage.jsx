@@ -30,7 +30,7 @@ function AddToCartPage() {
         tempPrice = tempPrice + element.itemQuantity * Number(element.price);
       }
     });
-    setAmount(250 + tempPrice);
+    setAmount(tempPrice);
   }, [addToCartList]);
 
   return (
