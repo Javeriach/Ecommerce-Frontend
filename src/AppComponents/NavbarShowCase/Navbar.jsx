@@ -171,12 +171,12 @@ function NavbarShowCase() {
       </div>
 
       {/* ------------------Small screen navbar bar content */}
-      <div className="flex md:hidden h-full justify-center items-center w-[100px] ">
+      <div className="flex md:hidden h-full justify-around items-center w-[90px] ">
         <ProductSearch />
 
-        <button className="p-2 " onClick={() => setNavDialogue(true)}>
+        <button className="me-2 " onClick={() => setNavDialogue(true)}>
           {' '}
-          <MenuIcon sx={{ fontSize: 40 }} />
+          <MenuIcon sx={{ fontSize: 45 }} />
         </button>
       </div>
 
@@ -273,7 +273,8 @@ function NavbarShowCase() {
             <div className="h-[1px] bg-black"></div>
 
             {/* ------Logged in user */}
-            {currentUserDetails.uid && (
+            {
+              currentUserDetails.uid && (
               <Link
                 className="font-medium cursor-pointer m-1 p-3 py-2 flex items-center justify-between hover:bg-gray-50 rounded-lg"
                 to="/Login"
@@ -285,7 +286,8 @@ function NavbarShowCase() {
                   </label>
                 </div>
               </Link>
-            )}
+              )
+            }
 
             {/* User Login  button*/}
 

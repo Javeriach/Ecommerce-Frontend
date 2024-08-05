@@ -9,13 +9,13 @@
   overflow: hidden;
 }
 .navbar {
-  background-color: var(--color-skyBlue);
   width: 100vw;
-  color: black;
+  color: white;
 }
 
 .headingStyling {
   font-size: 1.8rem;
+  color: white;
 }
 
 .dashboardHeading {
@@ -26,9 +26,8 @@
 .brandName {
   font-family: var(--font-1);
   font-weight: 500;
-  font-size: 2.5rem !important;
   text-decoration: none;
-  color: black !important;
+  color: white !important;
 }
 
 .tabs_section {

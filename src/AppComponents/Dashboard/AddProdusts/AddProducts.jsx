@@ -96,9 +96,9 @@ function AddProducts({ setShowOverlay }) {
   console.log(categories);
 
   return (
-    <section className={Style.AddProductSection}>
+    <section className={`${Style.AddProductSection} bg-lightPink`}>
       <div className="d-flex justify-content-end">
-        <label className="fs-5 btn border border-0" onClick={CloseBtnHandler}>
+        <label className="fs-5 btn border-0" onClick={CloseBtnHandler}>
           x
         </label>
       </div>

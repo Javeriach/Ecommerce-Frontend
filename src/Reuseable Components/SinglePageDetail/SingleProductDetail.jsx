@@ -1,5 +1,6 @@
 // External Imports
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // ----------Accordian
 import {
@@ -18,11 +19,13 @@ import { useURLParams } from '../../CustomHooks/useURLParams';
 import { useEShopData } from '../../Contexts/EShopDataProvider';
 import ProductDetailSkeleton from '@/AppComponents/ProductDetailSkeleton/ProductDetailSkeleton';
 import { useCartStorage } from '@/Contexts/ShoppingCart';
+import { useAuthenticator } from '@/Contexts/Authenticator';
 
 function SingleProductDetail() {
   let { id: itemID, quantity } = useURLParams();
   let [currentImage, setCurrentImage] = useState('');
-
+  let { currentUserDetails } = useAuthenticator();
+  let navigate = useNavigate();
   let { EshopData, currentProduct, getProductDetail, isLoading } =
     useEShopData();
     useEffect(() => {
@@ -35,6 +38,17 @@ function SingleProductDetail() {
   useEffect(() => {
     setCurrentImage(currentProduct?.image ? currentProduct.image[0] : '');
   }, [currentProduct]);
+
+  // ============Cart handler
+  let CartHandler = (e) => {
+    e.preventDefault();
+
+    if (!currentUserDetails.uid) {
+      navigate('/Login');
+    } else addToCartHandler(currentProduct);
+  };
+
+
 
   return (
     <div className={``}>
@@ -128,9 +142,7 @@ function SingleProductDetail() {
            
             <button
               className="text-white mt-[20px] bg-dark w-[100%] h-[40px] "
-              onClick={() => {
-                addToCartHandler(currentProduct);
-              }}
+              onClick={CartHandler}
             >
               Add To Cart
             </button>

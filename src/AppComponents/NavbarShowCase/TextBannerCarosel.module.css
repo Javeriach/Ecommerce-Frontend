@@ -2,12 +2,14 @@
   background-color: black;
   color: white;
   position: absolute;
-  margin-top: 5px;
+}
+
+.carousel {
+  margin-top: 30px !important;
 }
 
 @media (max-width: 500px) {
   .carousel {
-    margin-top: 38px;
     font-size: 0.9rem;
   }
 }

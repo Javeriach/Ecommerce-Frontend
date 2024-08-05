@@ -1,5 +1,4 @@
 .AddCategory {
-  background-color: var(--color-skyBlue);
   padding: 20px 40px;
   border-radius: 10px;
   color: black;
@@ -9,6 +8,7 @@
   font-family: var(--font-Calistoga--1);
   font-size: 2rem;
   text-align: center;
+  font-weight: 600;
 }
 
 .CategoryNameInput {

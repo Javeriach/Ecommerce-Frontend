@@ -1,6 +1,5 @@
 .AddProductSection {
   z-index: 1000;
-  background-color: var(--color-skyBlue);
   color: black;
   padding: 10px 30px;
   font-family: var(--font-ubuntu-3);

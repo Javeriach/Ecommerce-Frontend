@@ -34,8 +34,9 @@ function AddToCartPage() {
   }, [addToCartList]);
 
   return (
-    <div>
-      <div className="p-4 w-screen  ">
+  
+    <div className=' overflow-hidden'>
+       <div className="p-4 w-[100%]">
         <h5 className={`text-[40px] font-bold text-center mb-4`}>
           Cart
         </h5>
@@ -93,8 +94,12 @@ function AddToCartPage() {
           </div>
         )}
       </div>
-    </div>
+     </div>
+  
   );
 }
 
 export default AddToCartPage;
+
+
+

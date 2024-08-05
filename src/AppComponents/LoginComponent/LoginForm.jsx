@@ -1,7 +1,7 @@
 // -----------------React imports
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
 //------------------Firebase Imports
 
@@ -25,7 +25,7 @@ let reducer = (state, action) => {
 };
 
 function LoginForm() {
-  let { userVarified, loginHandler, GoogleAuthHandler, isLoading } =
+  let { userVarified, loginHandler, currentUserDetails, isLoading } =
     useAuthenticator();
   let navigate = useNavigate();
 
@@ -35,20 +35,29 @@ function LoginForm() {
   };
 
   let [{ email, password }, dispatch] = useReducer(reducer, initialState);
-
+  useEffect(() =>
+  {
+    if (currentUserDetails.uid)
+    {
+      navigate("/");
+    }
+  },[currentUserDetails])
   // -----------------------Login with eamil and pasword
   let loginWithEmailAndPassword = (e) => {
     e.preventDefault();
-    loginHandler(email, password);
-    console.log(userVarified);
-    if (userVarified) console.log('Varified');
+    try {
+      loginHandler(email, password);
+    } catch
+    {
+
+    }
   };
 
   return (
-    <div className={`${styles.login_section}`}>
+    <div className={`${styles.login_section} flex justify-center h-[500px] `}>
       <form
         action=""
-        className={`text-light ${styles.card}  w-[330px]  text-dark bg-white h-[370px]`}
+        className={`text-light ${styles.card}  w-[330px]  text-dark bg-white mt-5 h-[370px]`}
         onSubmit={loginWithEmailAndPassword}
       >
         <h1 className={`${styles.heading} text-center text-[40px]`}>Login</h1>

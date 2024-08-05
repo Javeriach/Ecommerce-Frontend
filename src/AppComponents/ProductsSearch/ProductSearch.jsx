@@ -40,8 +40,8 @@ function ProductSearch() {
         return item;
     });
 
-    setDisplayItems(data.slice(0, 3));
-    if (data.length > 3) SearchedProductsSetter(data);
+    setDisplayItems(data.slice(0, 2));
+    if (data.length > 2) SearchedProductsSetter(data);
     setFilteredData(data);
   }, [itemToSearch]);
 

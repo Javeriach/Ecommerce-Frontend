@@ -43,7 +43,7 @@ function Dashboard() {
         <div className={Styles.dashboard}>
           <div>
             {['md'].map((expand) => (
-              <Navbar key={expand} expand={expand} className={Styles.navbar}>
+              <Navbar key={expand} expand={expand} className={`${Styles.navbar} bg-darkPink`}>
                 <div className="d-flex container fluid">
                   <div className={`${Styles.HeadingToggleBtn}  d-flex`}>
                     <div className={Styles.desktopView}>
@@ -54,7 +54,7 @@ function Dashboard() {
 
                     <div className={`${Styles.brandWidth} `}>
                       <Navbar.Brand className={Styles.headingStyling}>
-                        <Link to="/" className={Styles.brandName}>
+                        <Link to="/" className={`text-[30px] md:text-[35px] ${Styles.brandName}`}>
                           EShopStore
                         </Link>
                       </Navbar.Brand>
@@ -62,7 +62,7 @@ function Dashboard() {
                   </div>
 
                   <div className={`${Styles.dashboardHeading} `}>
-                    <Navbar.Brand className={Styles.headingStyling}>
+                    <Navbar.Brand className={` text-[30px] md:text-[35px] ${Styles.headingStyling}`}>
                       Admin Dashboard
                     </Navbar.Brand>
                   </div>
@@ -95,7 +95,7 @@ function Dashboard() {
                                 <div>
                                   <img src={AddCategoryPng} />
                                 </div>
-                                <p className="text-dark">Add Category</p>
+                                <p className="text-white">Add Category</p>
                               </div>
                             </Nav.Link>
 
@@ -106,7 +106,7 @@ function Dashboard() {
                                 <div>
                                   <img src={AddProductsPng} />
                                 </div>
-                                <p className="text-dark">Add Products</p>
+                                <p className="text-white">Add Products</p>
                               </div>
                             </Nav.Link>
 
@@ -118,7 +118,7 @@ function Dashboard() {
                                 <div>
                                   <img src={Logout} />
                                 </div>
-                                <p className="text-dark">Logout</p>
+                                <p className="text-white">Logout</p>
                               </div>
                             </Nav.Link>
                           </Nav>

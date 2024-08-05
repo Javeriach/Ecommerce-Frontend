@@ -37,11 +37,11 @@ function AddCategory({ setShowOverlay }) {
   }, []);
 
   return (
-    <section className={Style.AddCategory}>
+    <section className={`${Style.AddCategory} bg-lightPink text-black`}>
       <div className="d-flex justify-content-end">
         <label
           htmlFor=""
-          className="fw-bold fs-5 btn border border-0"
+          className="fw-bold fs-5 btn border-0"
           onClick={() => setShowOverlay('')}
         >
           x
@@ -70,9 +70,9 @@ function AddCategory({ setShowOverlay }) {
            
 
         {/* ---------Add button */}
-            <Buttons type="Add" onClick={AddCategoryHandler}>
+            <button type="Add" className='bg-black text-white font-medium p-2 px-4 rounded' onClick={AddCategoryHandler}>
               {isLoading ? <Spinner /> :'Add'}
-            </Buttons>
+            </button>
        
         </div>
       </div>

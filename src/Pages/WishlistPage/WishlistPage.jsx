@@ -7,7 +7,7 @@ function WishlistPage() {
   return (
     <div>
       <section className="w-[100%] py-5 flex justify-content-center flex-col p-0 m-0  items-center">
-        <h1 className={'text-[40px] font-extrabold'}>My WishList🖤</h1>
+        <h1 className={' text-[30px] md:text-[40px] font-extrabold'}>My WishList🖤</h1>
 
        
         
@@ -60,7 +60,7 @@ function WishlistPage() {
                 </Link>
                ))}
                </div>) : (
-              <div className=' h-[200px] flex justify-center items-center  w-screen'>
+              <div className=' h-[400px] flex justify-center items-center  w-screen'>
               <label className={'w-screen  text-center'}>
                 No wishlist item available
               </label>{' '}

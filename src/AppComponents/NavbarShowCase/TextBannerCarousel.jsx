@@ -31,7 +31,7 @@ function TextBannerCarousel() {
         autoPlaySpeed={2000}
         keyBoardControl={true}
       transitionDuration={500}
-      className={`${Styles.carousel} h-[40px] mt-[30px] bg-[black] text-light`}
+      className={`${Styles.carousel} h-[40px]  bg-[black] text-light`}
        
       >
           {textArray.map((text , index) =>
