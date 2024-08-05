@@ -43,7 +43,7 @@ function ItemCard({ element }) {
   // Wishlist
   function wishlistHandler(e) {
     e.preventDefault();
-    if (!currentUserDetails.id) {
+    if (!currentUserDetails.uid) {
       navigate('/Login');
     } else addTOWishlist(itemId, name, price, image[0]);
   }

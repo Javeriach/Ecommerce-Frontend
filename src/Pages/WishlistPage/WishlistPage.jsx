@@ -1,9 +1,11 @@
+import { useAuthenticator } from '@/Contexts/Authenticator';
 import Footer from '../../AppComponents/Footer/Footer';
 import { useCartStorage } from '../../Contexts/ShoppingCart';
 import { Link } from 'react-router-dom';
 
 function WishlistPage() {
   let { wishlist, deleteWishItem } = useCartStorage();
+  let { currentUserDetails } = useAuthenticator();
   return (
     <div>
       <section className="w-[100%] py-5 flex justify-content-center flex-col p-0 m-0  items-center">

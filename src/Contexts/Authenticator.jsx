@@ -70,22 +70,22 @@ function Authenticator({ children }) {
   }
  
   
-  useEffect(() => {
+  // useEffect(() => {
   
-    onAuthStateChanged(Auth, (data) =>
-    {
-      if (userSignup) return;
-      if (data?.email)
-      {
-        console.log(data.email);
-        previouseUserLogin()
-        
-       }
+  //   onAuthStateChanged(Auth, (data) =>
+  //   {
+      
+  //     if (userSignup) return null;
+    
+  //     if (data?.email)
+  //     {
+  //       previouseUserLogin()
+  //      }
 
-    })
+  //   })
 
     
-  }, []);
+  // }, []);
 
   // ******************************************SignUp Handler
 

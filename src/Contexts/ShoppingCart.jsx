@@ -408,6 +408,7 @@ function ShoppingCart({ children }) {
   
     let localStorageUser = JSON.parse(localStorage.getItem("currentUser"));
     let localStorageProducts = JSON.parse(localStorage.getItem("products"));
+    console.log(session_id,!localStorageUser?.name ,!localStorageUser?.email ,!localStorageProducts?.length)
     if (!session_id || !localStorageUser?.name ||!localStorageUser?.email || !localStorageProducts?.length) return;
     try {
 

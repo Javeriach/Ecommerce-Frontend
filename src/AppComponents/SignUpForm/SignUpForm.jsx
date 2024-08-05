@@ -58,8 +58,8 @@ function SignUpForm() {
     let signUp = async (e) => {
         e.preventDefault();
         try {
-         await signUpHandler(firstname, lastname, email, password);
-            navigate("/Login");
+          await signUpHandler(firstname, lastname, email, password);
+          navigate("/Login");
         } catch (error) {
             throw new Error(error.message);
         }
