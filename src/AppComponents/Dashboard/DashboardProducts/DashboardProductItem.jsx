@@ -4,31 +4,41 @@ import { useEffect, useState } from 'react';
 import Edit from '../../../Images/Edit.png';
 import Delete from '../../../Images/Delete.png';
 import Style from './DashboardProductItem.module.css';
-import { useEShopData } from '@/Contexts/EShopDataProvider';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { BASE_URL } from '@/utils/constants';
+import toast from 'react-hot-toast';
+import { product_To_UpdateHandler, removeProductHandler } from '@/Redux/Slices/eshopSlice';
+import { setShowOverlay } from '@/Redux/Slices/handlersSlice';
 
 function DashboardProductItem({ item, index }) {
   let [isLoading, setLoading] = useState(false);
   let {
-    deleteProductHandler,
     showOverlay,
-    setShowOverlay,
-    UpdateProductHandler,
-  } = useEShopData();
+  } = useSelector(store=>store.eshopData);
+  let dispatch = useDispatch();
 
-  let deleteHandler = async () => {
+  let deleteHandler = async () =>
+  {
     try {
       setLoading(true);
-      await deleteProductHandler(item);
-    } catch (error) {
-      throw new Error(error.message);
+      await axios.post(BASE_URL + "/delete-product/"+ item?._id,{}, { withCredentials:true });
+      dispatch(removeProductHandler(item._id));
+      toast.success("Product deleted Successfully!");
+    } catch (error)
+    {
+      console.log("Something wen wrong!");
+      toast.error("Something went wrong!");
     } finally {
       setLoading(false);
     }
-  };
+  }
+
+ 
 
   let updatedProduct = () => {
-    setShowOverlay('updateProduct');
-    UpdateProductHandler('getElement', item);
+    dispatch(setShowOverlay("updateProduct"));
+    dispatch(product_To_UpdateHandler(item));
   };
 
   return (
@@ -39,7 +49,7 @@ function DashboardProductItem({ item, index }) {
       <td className={` border border-1 p-3`}>
         <div className="w-[120px]">
           <img
-            src={item.image ? item.image[0] : ''}
+            src={item.images ? item.images[0] : ''}
             className={` ${Style.image}`}
             alt="item-image"
           />
@@ -66,16 +76,16 @@ function DashboardProductItem({ item, index }) {
 
       <td className={`border border-1  `}>
         <label htmlFor="" className={`${Style.width2}`}>
-          {item.category}
+          {item.category.name}
         </label>
       </td>
 
       <td className={`border border-1 `}>
         <div className={`d-flex justify-content-center ${Style.width3}`}>
-          <img className="pointer" src={Edit} onClick={updatedProduct} />
+          <img className="pointer cursor-pointer" src={Edit} onClick={updatedProduct} />
           {!isLoading ? (
             <img
-              className=" ms-3 pointer"
+              className=" ms-3 pointer cursor-pointer"
               src={Delete}
               onClick={() => deleteHandler(item)}
             />

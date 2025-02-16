@@ -5,11 +5,13 @@ import 'react-multi-carousel/lib/styles.css';
 // --------------Internal Imports
 import CategoryItem from '../../Reuseable Components/CategoryItem/CategoryItem';
 import Styles from './Categories.module.css';
-import { useEShopData } from '../../Contexts/EShopDataProvider';
 import { Skeleton } from '../../Components/ui/skeleton';
+import { useSelector } from 'react-redux';
 
 function Categories() {
-  let { categories ,isLoading} = useEShopData();
+
+  let { categories,loading } = useSelector(store => store.eshopData);
+  
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -46,7 +48,7 @@ function Categories() {
         transitionDuration={500}
         className='mt-4 bg-white flex '
       >
-        {isLoading ? (
+        {loading? (
           'dumyString'.split('').map((item ,index) => (
             <div className="items-center w-[90%]  " key={index}>
               <Skeleton
@@ -61,7 +63,6 @@ function Categories() {
         ) : (
           categories.map((category, index) => (
             <CategoryItem category={category} key={index} />
-            // <div className='h-11 w-full bg-pink border'></div>
           ))
         )}
       </Carousel>

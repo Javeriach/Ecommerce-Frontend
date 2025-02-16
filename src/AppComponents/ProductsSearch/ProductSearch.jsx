@@ -18,12 +18,12 @@ import {
   SheetDescription,
 } from '../../Components/ui/sheet';
 
-import { useEShopData } from '@/Contexts/EShopDataProvider';
+// import {  } from '@/Contexts/EShopDataProvider';
 import { useEffect, useState } from 'react';
 import SearchedSingleItem from './SearchedSingleItem';
 
 function ProductSearch() {
-  let { EshopData, SearchedProductsSetter } = useEShopData();
+  let { EshopData, setShopData} = useState([]);
   let [itemToSearch, setItemToSearch] = useState('');
   let [filteredData, setFilteredData] = useState([]);
   let [displayItems, setDisplayItems] = useState([]);

@@ -16,36 +16,43 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 // ---------------------Internal Imports
 
 import { useURLParams } from '../../CustomHooks/useURLParams';
-import { useEShopData } from '../../Contexts/EShopDataProvider';
 import ProductDetailSkeleton from '@/AppComponents/ProductDetailSkeleton/ProductDetailSkeleton';
-import { useCartStorage } from '@/Contexts/ShoppingCart';
-import { useAuthenticator } from '@/Contexts/Authenticator';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { BASE_URL } from '@/utils/constants';
+import toast from 'react-hot-toast';
 
-function SingleProductDetail() {
-  let { id: itemID, quantity } = useURLParams();
+function SingleProductDetail({product,loading}) {
+
   let [currentImage, setCurrentImage] = useState('');
-  let { currentUserDetails } = useAuthenticator();
+  let user  = useSelector(store=>store.user);
   let navigate = useNavigate();
-  let { EshopData, currentProduct, getProductDetail, isLoading } =
-    useEShopData();
-    useEffect(() => {
-    getProductDetail(itemID);
-  }, [itemID]);
-
-  let { image, name, description, price, category,rating } = currentProduct;
-
-  let { addToCartHandler } = useCartStorage();
+  
   useEffect(() => {
-    setCurrentImage(currentProduct?.image ? currentProduct.image[0] : '');
-  }, [currentProduct]);
+    setCurrentImage(product?.images ? product?.images[0] : '');
+  }, [product]);
+
+ 
+  let addToCartHandler = async (req, res) =>
+  {
+    try {
+      let response = await axios.post(BASE_URL + "/cart/add-product/" + product._id, {}, { withCredentials: true });
+      toast.success("Product added to Cart successfully");
+    } catch (error)
+    {
+      console.log(error);
+      toast.error("Failed to add product to cart");
+    }
+  }
 
   // ============Cart handler
   let CartHandler = (e) => {
     e.preventDefault();
-
-    if (!currentUserDetails.uid) {
+    console.log(user);
+    if (!user?._id) {
       navigate('/Login');
-    } else addToCartHandler(currentProduct);
+      toast.error("Login First!!");
+    } else addToCartHandler();
   };
 
 
@@ -56,9 +63,9 @@ function SingleProductDetail() {
 
       {/* Product Image*/}
 
-      {isLoading ? (
+      {loading ? (
         <ProductDetailSkeleton />
-      ) : !isLoading && name ? (
+      ) : !loading && product ? (
         <div className='p-3 md:p-5 flex  flex-col md:flex-row md:gap-6'>
         
           {/* =========Images Section */}
@@ -68,7 +75,7 @@ function SingleProductDetail() {
             <img className={`w-[430px] h-[370px] min-[400px]:w-[390px] min-[400px]:h-[400px]  md:w-[500px]  md:h-[500px]`} src={currentImage} />
 
             <div className={`flex  w-[auto]  mt-3`}>
-              {image?.map((imgItem, index) => (
+              {product?.images?.map((imgItem, index) => (
                 <img
                   className={` ${index != 0 ? 'ms-3' : ''} ${
                     currentImage === imgItem
@@ -85,7 +92,7 @@ function SingleProductDetail() {
           {/* Products Details */}
           <div className={`w-[100%] md:w-[60%] mt-4 md:mt-0 `}>
             <h3 className={` text-[30px] md:text-[40px] text-center font-medium`} >
-              Titel:{name}
+              Titel:{product?.name}
             </h3>
 
               <div>
@@ -96,7 +103,7 @@ function SingleProductDetail() {
                           {' '}
                           <FiberManualRecordIcon sx={{ fontSize: 10 }} /> Price:
                         </label>
-                        <span className=" text-[17px] md:text-[20px] ">${price}</span>
+                        <span className=" text-[17px] md:text-[20px] ">${product?.price}</span>
                       </li>
 
                       <li>
@@ -104,7 +111,7 @@ function SingleProductDetail() {
                           <FiberManualRecordIcon sx={{ fontSize: 10 }} />{' '}
                           Category:
                         </label>
-                        <label className=" text-[17px] md:text-[20px] ">{category}</label>
+                        <label className=" text-[17px] md:text-[20px] ">{product?.category?.name}</label>
                       </li>
 
                       <li>
@@ -131,7 +138,7 @@ function SingleProductDetail() {
                     </label>
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-justify text-[17px] p-3 ">{description}</p>
+                    <p className="text-justify text-[17px] p-3 ">{product?.description}</p>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

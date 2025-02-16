@@ -1,19 +1,18 @@
 import Style from './DashboardProducts.module.css';
-
-import { useEShopData } from '@/Contexts/EShopDataProvider';
 import DashboardProductItem from './DashboardProductItem';
 import Spinner from '@/Reuseable Components/Spinner/Spinner';
+import { useSelector } from 'react-redux';
 
 function DashboardProducts() {
-  let { EshopData, isLoading ,UpdateProductHandler,elementToUpdate} = useEShopData();
+
   
-  
+  let { products ,loading} = useSelector(store => store.eshopData);
 
   return (
   
       <div className={` ${Style.tablewrapper} `}>
-      {isLoading ? <div className='d-flex  justify-content-center h-100  align-items-center w-100'> <Spinner />  </div> :
-        EshopData.length > 0 ?
+      {loading ? <div className='d-flex  justify-content-center h-100  align-items-center w-100'> <Spinner />  </div> :
+        products?.length > 0 ?
           <table className={Style.table}>
           <thead>
             <tr className={`${Style.tableHeadsection}`}>
@@ -34,7 +33,7 @@ function DashboardProducts() {
           </thead>
 
           <tbody className='w-100 h-100 '>
-          { EshopData?.map((item, index) => (
+          { products?.map((item, index) => (
               <DashboardProductItem index={index} key={index} item = {item} />
               ))}
           </tbody>

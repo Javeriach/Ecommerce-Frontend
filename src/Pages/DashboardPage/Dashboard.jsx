@@ -12,29 +12,34 @@ import Logout from '../../Images/Logout.png';
 // -------------------Internal Imports
 import DashboardSectionBar from '@/AppComponents/Dashboard/DashboardSectionBar/DashboardSectionBar';
 import Styles from './Dashboard.module.css';
-import { useAuthenticator } from '../../Contexts/Authenticator';
 import Overlay from '../../Reuseable Components/Overlay/Overlay';
 import AddCategory from '../../AppComponents/Dashboard/AddCategory/AddCategory';
 import AddProducts from '@/AppComponents/Dashboard/AddProdusts/AddProducts';
 import { useNavigate } from 'react-router-dom';
-import { useEShopData } from '../../Contexts/EShopDataProvider';
 import DashBoardMobileView from './DashBoardMobileView';
+import axios from 'axios';
+import { setShowOverlay } from '@/Redux/Slices/handlersSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Dashboard() {
-  let { signOutHandler, isLoading } = useAuthenticator();
-  let { showOverlay, setShowOverlay, shoppingStoreMessage } = useEShopData();
+  let { showOverlay} = useSelector(store=>store.handlers);
   let navigate = useNavigate();
-
-  let LogoutHandler = () => {
-    async function varify() {
-      try {
-        await signOutHandler();
-        navigate('/');
-      } catch (err) {
-        console.error(err);
-      }
+  let dispatch = useDispatch();
+  let LogoutHandler = async () => {
+    if (!user) return;
+    try {
+      await axios.post(
+        BASE_USL + '/auth/logout',
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      navigate('/login');
+      toast.success('Logout Successfully!!');
+    } catch (err) {
+      toast.error('Logout Failed!!');
     }
-    varify();
   };
 
   return (
@@ -43,7 +48,7 @@ function Dashboard() {
         <div className={Styles.dashboard}>
           <div>
             {['md'].map((expand) => (
-              <Navbar key={expand} expand={expand} className={`${Styles.navbar} bg-darkPink`}>
+              <Navbar key={expand} expand={expand} className={`${Styles.navbar} bg-bayoo`}>
                 <div className="d-flex container fluid">
                   <div className={`${Styles.HeadingToggleBtn}  d-flex`}>
                     <div className={Styles.desktopView}>
@@ -62,7 +67,7 @@ function Dashboard() {
                   </div>
 
                   <div className={`${Styles.dashboardHeading} `}>
-                    <Navbar.Brand className={` text-[30px] md:text-[35px] ${Styles.headingStyling}`}>
+                    <Navbar.Brand className={` text-[30px] md:text-[30px] font-semibold text-white`}>
                       Admin Dashboard
                     </Navbar.Brand>
                   </div>
@@ -90,7 +95,7 @@ function Dashboard() {
                             <Nav.Link href="#action1">
                               <div
                                 className={Styles.CrudSection}
-                                onClick={() => setShowOverlay('AddCategory')}
+                                onClick={() => dispatch(setShowOverlay('AddCategory'))}
                               >
                                 <div>
                                   <img src={AddCategoryPng} />
@@ -100,7 +105,7 @@ function Dashboard() {
                             </Nav.Link>
 
                             <Nav.Link
-                              onClick={() => setShowOverlay('AddProduct')}
+                              onClick={() => dispatch(setShowOverlay('AddProduct'))}
                             >
                               <div className={Styles.CrudSection}>
                                 <div>
@@ -131,14 +136,14 @@ function Dashboard() {
             ))}
           </div>
 
-          {shoppingStoreMessage?.icon && shoppingStoreMessage?.message ? (
+          {/* {shoppingStoreMessage?.icon && shoppingStoreMessage?.message ? (
             <Message
               icon={shoppingStoreMessage.icon}
               message={shoppingStoreMessage.message}
             />
           ) : (
             ''
-          )}
+          )} */}
 
           <div className={Styles.desktopView}>
             <DashboardSectionBar />
@@ -152,15 +157,15 @@ function Dashboard() {
         <div className="w-100 h-100">
           {showOverlay === 'AddCategory' ? (
             <Overlay>
-              <AddCategory setShowOverlay={setShowOverlay} />{' '}
+              <AddCategory  />{' '}
             </Overlay>
           ) : showOverlay === 'AddProduct' ? (
             <Overlay>
-              <AddProducts setShowOverlay={setShowOverlay} />
+              <AddProducts  />
             </Overlay>
           ) : showOverlay === 'updateProduct' ? (
             <Overlay>
-              <AddProducts setShowOverlay={setShowOverlay} />
+              <AddProducts />
             </Overlay>
           ) : (
             ''

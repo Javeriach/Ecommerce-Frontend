@@ -28,6 +28,9 @@ module.exports = {
         navyBlue: '#082f49',
         darkPink: '#ef1879',
         lightPink: '#fe369a',
+        deepMarine: '#336663',
+        emu_eg: '#408785',
+        bayoo: '#1c706e',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -83,5 +86,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('daisyui')],
 };

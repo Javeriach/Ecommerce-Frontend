@@ -1,4 +1,3 @@
-import { useEShopData } from "@/Contexts/EShopDataProvider";
 import Style from "./Overlay.module.css";
 function Overlay({ children }) {
    

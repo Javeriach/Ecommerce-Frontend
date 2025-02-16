@@ -1,19 +1,14 @@
-// --------------------Internal Imports
-
 import { useParams } from "react-router-dom";
-
 import Styles from "./LatestProducts.module.css";
-import { useEShopData } from "../../Contexts/EShopDataProvider";
 import ItemCard from "../../Reuseable Components/ItemCard/ItemCard";
+import { useSelector } from "react-redux";
 
-function LatestProducts({ RelatedProducts, AllResultProducts }) {
+function LatestProducts({categoryProducts,relatedProducts}) {
 
-    let { EshopData,  CategoryStoreData } = useEShopData();
-
-     let {category}= useParams();
+    let { products,  categories } = useSelector(store=>store.eshopData);
+    let {categoryId}= useParams();
     
-    let DataArray =RelatedProducts?.length? RelatedProducts: category ? CategoryStoreData : AllResultProducts? AllResultProducts: EshopData ? EshopData.slice(0,10) :[];
-   
+    let DataArray =relatedProducts?.length ? relatedProducts : categoryId ? categoryProducts: products;
     return (
 
        <div className={` m-0 w-100 `}>

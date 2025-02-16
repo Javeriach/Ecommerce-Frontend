@@ -5,10 +5,46 @@ import LandingPage from '../../AppComponents/LandingPageComponent/LandingPage';
 import Footer from '../../AppComponents/Footer/Footer';
 import LatestProducts from '../../AppComponents/ProductsCardContainer/LatestProducts';
 import ItemCardSkeleton from '@/AppComponents/ItemCardSkeleton/ItemCardSkeleton';
-import { useEShopData } from '@/Contexts/EShopDataProvider';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { categoriesHandler, loadingHandler, productsHandler } from '@/Redux/Slices/eshopSlice';
+import { BASE_URL } from '@/utils/constants';
 function HomePage() {
-  let { isLoading, EshopData,categories } = useEShopData();
-  console.log(EshopData);
+  let {products,categories,loading } = useSelector(store=>store.eshopData);
+  let dispatch = useDispatch();
+ 
+
+  let fetchData = async () => {
+    try {
+
+      
+      dispatch(loadingHandler(true));
+      let response = await axios.get(BASE_URL + '/categories', {
+        withCredentials: true,
+      });
+      
+      //DISPATHC THE SAVED THE PRODUCT TO THE REDUX STORE
+      dispatch(categoriesHandler(response.data.categories));
+
+
+      const responseData = await axios.get(BASE_URL + "/fetch-product", { withCredentials: true });
+      dispatch(productsHandler(responseData.data.products));
+      
+    } catch (error) {
+      console.log(error);
+      throw new Error('Something went wrong');
+    } finally {
+      dispatch(loadingHandler(false));
+    }
+  };
+
+  
+  useEffect(() =>
+  {
+    if(!products?.length || !categories?.length)
+    fetchData();
+  },[])
   return (
     <div className={``}>
       
@@ -19,7 +55,7 @@ function HomePage() {
         <h4 className={` mt-8 md:ml-[30px] text-[30px]  md:text-[35px] font-[600]  mb-2`}>Categories</h4>
 
         </div>
-        {!isLoading && !categories?.length ? (
+        {!loading && !categories?.length ? (
         <div className="h-[200px] relative w-screen flex justify-center m-3 ">
         <p className=" w-[80%] ml-[60px] text-center text-bold  mt-[30px] ">
           Categories  Fetching Failed...
@@ -42,9 +78,9 @@ function HomePage() {
             <button className="btn bg-dark text-light mt-1 text-[15px] rounded-0">View All <ArrowRightAltIcon /></button>
           </Link>
         </div>
-        {isLoading ? (
+        {loading ? (
           <ItemCardSkeleton tempString={'tempStri'} />
-        ) : !isLoading && !EshopData?.length ? (
+        ) : !loading && !products?.length ? (
           <div className="h-[200px] relative w-screen flex justify-center ">
             <p className=" w-[80%] ml-[60px] text-center text-bold  mt-[30px] ">
               Products Fetching Failed...

@@ -16,35 +16,46 @@ import PersonIcon from '@mui/icons-material/Person';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import LoginIcon from '@mui/icons-material/Login';
 // ----------------Authenticator imports
-
-import { useAuthenticator } from '../../Contexts/Authenticator';
-import { useCartStorage } from '../../Contexts/ShoppingCart';
 import ProductSearch from '@/AppComponents/ProductsSearch/ProductSearch';
 import ESLogo from '../../Images/ESLogo.png';
 import Aos from 'aos';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { BASE_URL } from '@/utils/constants';
+import toast from 'react-hot-toast';
 
 function NavbarShowCase() {
-  let { addToCartList, wishlist } = useCartStorage();
-  let { signOutHandler, currentUserDetails } = useAuthenticator();
+  // let { addToCartList, wishlist } = useCartStorage();
+  let user = useSelector((store) => store.user);
+  
   let [navDialogue, setNavDialogue] = useState(false);
   let [toggleDropDown, setToggleDropDown] = useState(false);
   let dropdownBtnRef = useRef();
   let navigate = useNavigate();
-  
-  useEffect(() =>
-    {
-      Aos.init({ duration: 100 });
-    }, [])
-    
+
+  useEffect(() => {
+    Aos.init({ duration: 100 });
+  }, []);
+
+  console.log(user);
   // --------Handlers
-  let LogoutHandler = async (e) => {
-    e.preventDefault();
+  let LogoutHandler = async () => {
+    if (!user) return;
     try {
-      await signOutHandler();
-      navigate('/');
-    } catch {}
-    setNavDialogue(false);
-    setToggleDropDown(false);
+      await axios.post(
+        BASE_URL + '/auth/logout',
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      dispatch(removeUser());
+      navigate('/login');
+      toast.success('Logout Successfully!!');
+    } catch (err) {
+      console.log(err);
+      toast.error('Logout Failed!!');
+    }
   };
 
   let handleMenu = () => {
@@ -99,7 +110,7 @@ function NavbarShowCase() {
             <label
               className={` bg-blue-700 rounded-[20px] w-[20px] text-white text-[15px] absolute  text-center mb-2`}
             >
-              {wishlist.length}
+              {/* {wishlist.length} */}
             </label>
           </div>
         </Link>
@@ -110,12 +121,12 @@ function NavbarShowCase() {
             <label
               className={` bg-blue-700 rounded-[20px] w-[20px] ml-0 text-white text-[15px] absolute  text-center mb-2`}
             >
-              {addToCartList.length}
+              {/* {addToCartList.length} */}
             </label>
           </div>
         </Link>
         {/* -------------dropdown */}
-        {!currentUserDetails.uid ? (
+        {!user?._id ? (
           <Link to={'/Login'} className="font-medium text-[30px]">
             Login
           </Link>
@@ -127,7 +138,7 @@ function NavbarShowCase() {
               id="dropdown"
             >
               <label className="text-[20px] mt-1 ml-2">
-                {currentUserDetails?.name?.split(' ')[0]}
+                {user?.firstName}
               </label>
               {toggleDropDown ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </button>
@@ -136,24 +147,25 @@ function NavbarShowCase() {
                 transition
                 className="absolute right-0 z-10 mt-0 w-auto h-auto py-3 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
               >
-                  {currentUserDetails?.email == "javeriakanwal904@gmail.com" &&
-                    <>
-                      <div className="  hover:bg-gray-300 cursor-pointer w-[100%] px-3 h-8 flex items-center  ">
-                  <Link
-                    to={'/Admin-Dashboard'}
-                    onClick={() => setToggleDropDown((ps) => !ps)}
-                    className="text-lg flex justify-around"
-                  >
-                    {/* {currentUserDetails?.name?.split(' ')[0]} */}
+                {
+                  <>
+                    <div className="  hover:bg-gray-300 cursor-pointer w-[100%] px-3 h-8 flex items-center  ">
+                      <Link
+                        to={'/Admin-Dashboard'}
+                        onClick={() => setToggleDropDown((ps) => !ps)}
+                        className="text-lg flex justify-around"
+                      >
+                        {/* {currentUserDetails?.name?.split(' ')[0]} */}
 
-                    <DashboardIcon />
-                    <label className="ms-[10px] text-lg flex justify-around">
-                      Dashboard
-                    </label>
-                  </Link>
-                </div>
-                <div className="h-[1px] bg-slate-600 w-[100%]"> </div>  </> 
-                  }
+                        <DashboardIcon />
+                        <label className="ms-[10px] text-lg flex justify-around">
+                          Dashboard
+                        </label>
+                      </Link>
+                    </div>
+                    <div className="h-[1px] bg-slate-600 w-[100%]"> </div>{' '}
+                  </>
+                }
                 <div className=" hover:bg-gray-300 cursor-pointer w-[100%] px-3 h-8 flex items-center ">
                   <LogoutIcon />
                   <label
@@ -164,7 +176,6 @@ function NavbarShowCase() {
                   </label>
                 </div>
               </div>
-           
             )}
           </div>
         )}
@@ -209,7 +220,7 @@ function NavbarShowCase() {
             </button>
           </div>
           {/* -----------menu */}
-          <div className="mt-6" >
+          <div className="mt-6">
             <Link
               className="font-medium cursor-pointer m-1 p-3 py-2 flex items-center justify-between hover:bg-gray-50 rounded-lg"
               to="/"
@@ -239,24 +250,23 @@ function NavbarShowCase() {
             {/* Dashboard */}
 
             <div className="h-[1px] bg-black"></div>
-            {currentUserDetails?.email == "javeriakanwal904@gmail.com" &&
-               <>
-              <Link
-              className="font-medium cursor-pointer m-1 p-3 py-2  flex items-center justify-between hover:bg-gray-50 rounded-lg"
-              to="/Admin-Dashboard"
-            >
-              <div className="flex items-center h-full w-full">
-                <DashboardIcon sx={{ fontSize: 30 }} />
-                <label className="text-[20px] mt-1 ml-2">Dashboard</label>
-              </div>
+            {
+              <>
+                <Link
+                  className="font-medium cursor-pointer m-1 p-3 py-2  flex items-center justify-between hover:bg-gray-50 rounded-lg"
+                  to="/Admin-Dashboard"
+                >
+                  <div className="flex items-center h-full w-full">
+                    <DashboardIcon sx={{ fontSize: 30 }} />
+                    <label className="text-[20px] mt-1 ml-2">Dashboard</label>
+                  </div>
 
-              <ChevronRightIcon sx={{ fontSize: 30 }} />
-              </Link>
+                  <ChevronRightIcon sx={{ fontSize: 30 }} />
+                </Link>
                 <div className="h-[1px] bg-black"></div>
-             </>
+              </>
             }
 
-          
             {/* Wishlist page */}
 
             <Link
@@ -273,8 +283,7 @@ function NavbarShowCase() {
             <div className="h-[1px] bg-black"></div>
 
             {/* ------Logged in user */}
-            {
-              currentUserDetails.uid && (
+            {currentUserDetails.uid && (
               <Link
                 className="font-medium cursor-pointer m-1 p-3 py-2 flex items-center justify-between hover:bg-gray-50 rounded-lg"
                 to="/Login"
@@ -286,8 +295,7 @@ function NavbarShowCase() {
                   </label>
                 </div>
               </Link>
-              )
-            }
+            )}
 
             {/* User Login  button*/}
 

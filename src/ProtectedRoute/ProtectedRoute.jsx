@@ -6,13 +6,13 @@ function ProtectedRoute({ children }) {
     let { currentUserDetails } = useAuthenticator();
     let navigate = useNavigate();
     
-    if (Auth?.currentUser?.email !== 'javeriakanwal904@gmail.com')
-        navigate("/");
+    // if (Auth?.currentUser?.email !== 'javeriakanwal904@gmail.com')
+    //     navigate("/");
 
-    useEffect(() => {
-        if (Auth?.currentUser?.email !== 'javeriakanwal904@gmail.com')
-            navigate("/");
-    }, [navigate]);
+    // useEffect(() => {
+    //     if (Auth?.currentUser?.email !== 'javeriakanwal904@gmail.com')
+    //         navigate("/");
+    // }, [navigate]);
 
 
     return children;

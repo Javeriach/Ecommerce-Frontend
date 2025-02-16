@@ -8,73 +8,72 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 
 // --------------------Internal
 import Styles from './ItemCard.module.css';
-import { useCartStorage } from '../../Contexts/ShoppingCart';
 import { useEffect, useState } from 'react';
-import { useAuthenticator } from '../../Contexts/Authenticator';
+import { useSelector } from 'react-redux';
 
 function ItemCard({ element }) {
-  let { category } = useParams();
-  let { addToCartHandler, addTOWishlist, isLoading, wishlist } =
-    useCartStorage();
-  let [wishedItem, setWishedItem] = useState(false);
-  useEffect(() => {
-    let result = wishlist?.filter((item) => item.regularItemId === element.id);
-    if (result?.length > 0) {
-      setWishedItem(true);
-    }
-  }, [wishlist]);
+  let { user } = useSelector(store => store.user);
+  let { categoryName,categoryId } = useParams();
+  // let { addToCartHandler, addTOWishlist, isLoading, wishlist } =
+  //   useCartStorage();
+  // let [wishedItem, setWishedItem] = useState(false);
+  // useEffect(() => {
+  //   let result = wishlist?.filter((item) => item.regularid === element.id);
+  //   if (result?.length > 0) {
+  //     setWishedItem(true);
+  //   }
+  // }, [wishlist]);
 
-  let { currentUserDetails } = useAuthenticator();
+  // let { currentUserDetails } = useAuthenticator();
 
-  let { name, id: itemId, image, price, rating } = element;
+ 
+  let { name, _id: id, images, price, rating ,category} = element;
 
-  if (!element) return;
+  // if (!element) return;
 
-  let navigate = useNavigate();
+  // let navigate = useNavigate();
 
-  let CartHandler = (e) => {
-    e.preventDefault();
+  // let CartHandler = (e) => {
+  //   e.preventDefault();
 
-    if (!currentUserDetails.uid) {
-      navigate('/Login');
-    } else addToCartHandler(element);
-  };
+  //   if (!currentUserDetails.uid) {
+  //     navigate('/Login');
+  //   } else addToCartHandler(element);
+  // };
 
-  // Wishlist
-  function wishlistHandler(e) {
-    e.preventDefault();
-    if (!currentUserDetails.uid) {
-      navigate('/Login');
-    } else addTOWishlist(itemId, name, price, image[0]);
-  }
+  // // Wishlist
+  // function wishlistHandler(e) {
+  //   e.preventDefault();
+  //   if (!currentUserDetails.uid) {
+  //     navigate('/Login');
+  //   } else addTOWishlist(id, name, price, image[0]);
+  // }
 
   return (
     <Link
       to={
-        category
-          ? `/Categories/${category}/Products?itemId=${itemId}`
-          : `/latestProducts?itemId=${itemId}`
+        categoryId
+          ? `/Categories/${categoryName}/Products?itemId=${categoryId}`
+          : `/latestProducts?itemId=${id}`
       }
       className={` w-[150px] h-[200px] md:w-[300px] md:h-[400px] ${Styles.card} card text-decoration-none`}
     >
       <div className={`${Styles.card_data}`}>
         <div className="d-flex bg-white justify-content-center p-0 card-img-top ">
           <img
-            src={image[0]}
+            src={images[0]}
             className={`w-[150px] h-[150px] md:w-[300px]  md:h-[300px]  ${Styles.card_image}`}
             alt="..."
           />
           <div className="flex justify-end">
-            {!wishedItem ? (
+            {"" ? (
               <FontAwesomeIcon
                 icon={faHeart}
-                onClick={wishlistHandler}
                 className={`absolute ${Styles.heart}  text-[30px]`}
               />
             ) : (
               <div
                 className={`absolute ${Styles.heart} `}
-                onClick={wishlistHandler}
               >
                 {' '}
                 <FavoriteIcon sx={{ fontSize: 35 }} />
@@ -121,7 +120,7 @@ function ItemCard({ element }) {
            
           <div className='md:hidden'>
             <AddShoppingCartOutlinedIcon
-                onClick={CartHandler}
+                // onClick={CartHandler}
                 sx={{ fontSize: 20 }}
               />
           </div>
@@ -130,7 +129,7 @@ function ItemCard({ element }) {
       
             <div className='hidden md:block'>
             <AddShoppingCartOutlinedIcon
-                onClick={CartHandler}
+                // onClick={CartHandler}
                 sx={{ fontSize: 30 }}
               />
         
