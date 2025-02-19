@@ -9,51 +9,91 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 // --------------------Internal
 import Styles from './ItemCard.module.css';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { BASE_URL } from '@/utils/constants';
+import { addItemToCartHandler, addItemToWistlistHandler, removeItemFromWishtlistHandler, userProductsloadingHandler } from '@/Redux/Slices/userProducts';
+import toast from 'react-hot-toast';
 
 function ItemCard({ element }) {
-  let { user } = useSelector(store => store.user);
-  let { categoryName,categoryId } = useParams();
-  // let { addToCartHandler, addTOWishlist, isLoading, wishlist } =
-  //   useCartStorage();
-  // let [wishedItem, setWishedItem] = useState(false);
-  // useEffect(() => {
-  //   let result = wishlist?.filter((item) => item.regularid === element.id);
-  //   if (result?.length > 0) {
-  //     setWishedItem(true);
-  //   }
-  // }, [wishlist]);
 
-  // let { currentUserDetails } = useAuthenticator();
+  let { categoryName, categoryId } = useParams();
+  let dispatch = useDispatch(false);
+  let navigate = useNavigate();
+  let { products } = useSelector(store => store.userProducts.wishedItems);
+  let [add_To_Wishtlist, setAddTo_WishList_ForWishlist] = useState(false);
+  let user  = useSelector(store => store.user);
+  
+  useEffect(() => {
+    products.forEach((item) => {
+    
+      if (item.product._id === element._id)
+        setAddTo_WishList_ForWishlist(true);
+        else  setAddTo_WishList_ForWishlist(false);
+    })
+    if (products?.length === 0) setAddTo_WishList_ForWishlist(false);
+  }, [element,products]);
 
+    //================================================ADD TO CART HANDLER==========================================
+
+  let CartHandler = async (e) =>
+  {
+    e.preventDefault();
+      try {
+        dispatch(userProductsloadingHandler(true));
+        let response = await axios.post(BASE_URL + "/cart/add-product/" + element._id, {}, { withCredentials: true });
+        toast.success(response.data.message);
+        if(response.status === 200)
+      {  dispatch(addItemToCartHandler(response.data.cart));}
+      } catch (error)
+      {
+        console.log(error);
+        toast.error("Failed to add product to cart");
+      } finally {
+        dispatch(userProductsloadingHandler(false));
+      }
+    }
+  
  
   let { name, _id: id, images, price, rating ,category} = element;
 
-  // if (!element) return;
+  //================================================WISHLIST==========================================
+  let addToWishListHandler = async () =>
+  {
+    try
+    {
+      dispatch(userProductsloadingHandler(true));
+      let response = await axios.patch(BASE_URL + `/wishlist/add-product/${element._id}`,{},{withCredentials:true});
+      toast.success(response.data.message);
+      if (response.status === 201)
+        dispatch(removeItemFromWishtlistHandler(element._id));
+      if(response.status === 200)
+      dispatch(addItemToWistlistHandler(response.data.wishlist));
+     
+    } catch (error)
+    {
+      console.log(error);
+      toast.error("Failed To add product to Wislist");
+    } finally {
+      dispatch(userProductsloadingHandler(false));
+    }
+  }
 
-  // let navigate = useNavigate();
-
-  // let CartHandler = (e) => {
-  //   e.preventDefault();
-
-  //   if (!currentUserDetails.uid) {
-  //     navigate('/Login');
-  //   } else addToCartHandler(element);
-  // };
-
-  // // Wishlist
-  // function wishlistHandler(e) {
-  //   e.preventDefault();
-  //   if (!currentUserDetails.uid) {
-  //     navigate('/Login');
-  //   } else addTOWishlist(id, name, price, image[0]);
-  // }
+  function wishlistHandler(e) {
+    e.preventDefault();
+   
+    if (!user._id) {
+      navigate('/Login');
+    }
+    else
+      addToWishListHandler();
+  }
 
   return (
     <Link
       to={
         categoryId
-          ? `/Categories/${categoryName}/Products?itemId=${categoryId}`
+          ? `/Categories/${categoryName}/${categoryId}/Product?itemId=${id}`
           : `/latestProducts?itemId=${id}`
       }
       className={` w-[150px] h-[200px] md:w-[300px] md:h-[400px] ${Styles.card} card text-decoration-none`}
@@ -66,17 +106,20 @@ function ItemCard({ element }) {
             alt="..."
           />
           <div className="flex justify-end">
-            {"" ? (
+          
+            {!add_To_Wishtlist ? (
+              
+              <div className=' flex justify-center items-center absolute rounded-full bg-red-500 w-[40px] h-[40px]'>
               <FontAwesomeIcon
                 icon={faHeart}
-                className={`absolute ${Styles.heart}  text-[30px]`}
-              />
+                className={` text-[30px]`}
+                onClick={wishlistHandler}
+              /></div>
             ) : (
-              <div
-                className={`absolute ${Styles.heart} `}
-              >
-                {' '}
-                <FavoriteIcon sx={{ fontSize: 35 }} />
+              <div className=' flex justify-center items-center absolute rounded-full bg-red-500 w-[40px] h-[40px]'>
+                  <FavoriteIcon sx={ {fontSize: 30 , color:"white"}}
+                    onClick={wishlistHandler}
+                  />
               </div>
             )}
           </div>
@@ -120,19 +163,15 @@ function ItemCard({ element }) {
            
           <div className='md:hidden'>
             <AddShoppingCartOutlinedIcon
-                // onClick={CartHandler}
+                onClick={CartHandler}
                 sx={{ fontSize: 20 }}
               />
           </div>
-        
-           
-      
             <div className='hidden md:block'>
             <AddShoppingCartOutlinedIcon
-                // onClick={CartHandler}
+                onClick={CartHandler}
                 sx={{ fontSize: 30 }}
               />
-        
           </div>
 
         

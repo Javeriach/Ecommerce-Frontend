@@ -7,6 +7,7 @@ const eshopData = createSlice({
     categories: [],
     productToUpdate: {},
     loading: false,
+    searchedProductsList: [],
   },
   reducers: {
     categoryAdditionHandler: (state, action) => {
@@ -47,6 +48,9 @@ const eshopData = createSlice({
       console.log('Updated Products List:', updatedProductsList); // Log the updated list for debugging
       return { ...state, products: updatedProductsList, productToUpdate: {} };
     },
+    searchedProductsListHandler: (state, action) => {
+      return { ...state, searchedProductsList: action.payload };
+    },
   },
 });
 
@@ -59,5 +63,6 @@ export const {
   loadingHandler,
   removeProductHandler,
   productsUpdationHandler,
+  searchedProductsListHandler,
 } = eshopData.actions;
 export default eshopData.reducer;

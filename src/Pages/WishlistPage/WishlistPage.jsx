@@ -1,11 +1,33 @@
-import { useAuthenticator } from '@/Contexts/Authenticator';
 import Footer from '../../AppComponents/Footer/Footer';
-import { useCartStorage } from '../../Contexts/ShoppingCart';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { removeItemFromWishtlistHandler, userProductsloadingHandler } from '@/Redux/Slices/userProducts';
+import toast from 'react-hot-toast';
+import { BASE_URL } from '@/utils/constants';
 
 function WishlistPage() {
-  let { wishlist, deleteWishItem } = useCartStorage();
-  let { currentUserDetails } = useAuthenticator();
+  let { products} = useSelector(store=>store.userProducts.wishedItems);
+  let dispatch = useDispatch();
+
+  let removeFromWishListHandler = async (_id) =>
+  {
+      try
+      {
+        dispatch(userProductsloadingHandler(true));
+        let response = await axios.patch(BASE_URL + `/wishlist/delete-Product/${_id}`,{},{withCredentials:true});
+        toast.success(response.data.message);
+        dispatch(removeItemFromWishtlistHandler(_id));
+      } catch (error)
+      {
+        console.log(error);
+        toast.error("Something went wrong!");
+      } finally {
+        dispatch(userProductsloadingHandler(false));
+      }
+    }
+
+ 
   return (
     <div>
       <section className="w-[100%] py-5 flex justify-content-center flex-col p-0 m-0  items-center">
@@ -15,19 +37,19 @@ function WishlistPage() {
         
        
             {
-            wishlist.length > 0 ? (
+            products.length > 0 ? (
               <div
               className={`grid md:grid-cols-2 md:gap-8  justify-content-around w-screen p-0 m-0 container  overflow-auto`}
               >
-              {wishlist.map((item, index) => (
+              {products?.map((item, index) => (
                   <Link
                   key={index}
                   className="text-decoration-none text-dark mt-3    md:w-[400px]  min-w-[300px]   "
-                  to={`/wishlist/ProductDetails?itemId=${item.regularItemId}`}
+                  to={`/wishlist/ProductDetails?itemId=${item.product._id}`}
                 >
                   <div className="flex h-[120px]">
                     <div>
-                      <img className=" w-[130px] md:w-[150px] h-[120px] " src={item.image} />
+                      <img className=" w-[130px] md:w-[150px] h-[120px] " src={item.product.images[0]} />
                     </div>
 
                     <div
@@ -35,21 +57,22 @@ function WishlistPage() {
                     >
                       <div>
                         <div className='w-[200px] flex justify-between '>
-                          <p className={'text-xl font-semibold block'}>{item.name}</p>
+                          <p className={'text-xl font-semibold block'}>{item.product.name}</p>
                           <div>
                             <p
-                              className={''}
+                              className="font-bold ms-3"
                               onClick={(e) => {
                                 e.preventDefault();
-                                deleteWishItem(item.id);
+                                removeFromWishListHandler(item?.product._id);
                               }}
+                              
                             >
                               X
                             </p>
                           </div>
                         </div>
 
-                        <b className={''}>${item.price}</b>
+                        <b className={''}>${item.product.price}</b>
                       </div>
 
                       <button

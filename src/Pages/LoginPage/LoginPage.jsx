@@ -56,9 +56,8 @@ export default function Login() {
         );
         
         toast.success('LoginNow');
-        
+      navigate("/");
       dispatch(addUser(response.data));
-      // TO CONNECT THE SOCKET WHEN WE GET LOGGED IN
     } catch (error) {
       if (error.status === 400) {
         setError(error.response.data.message);
@@ -90,6 +89,7 @@ export default function Login() {
 
       dispatch(addUser(result.data));
       toast.success('Login successfully!!');
+      navigate("/");
         } catch (error) {
       if (error.status === 400) {
         setError(error.response.data.message);

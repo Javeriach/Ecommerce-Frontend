@@ -17,31 +17,41 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 import { useURLParams } from '../../CustomHooks/useURLParams';
 import ProductDetailSkeleton from '@/AppComponents/ProductDetailSkeleton/ProductDetailSkeleton';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { BASE_URL } from '@/utils/constants';
 import toast from 'react-hot-toast';
+import Spinner from '../Spinner/Spinner';
+import { addItemToCartHandler } from '@/Redux/Slices/userProducts';
 
 function SingleProductDetail({product,loading}) {
 
   let [currentImage, setCurrentImage] = useState('');
-  let user  = useSelector(store=>store.user);
+  let user = useSelector(store => store.user);
+  let dispatch = useDispatch();
   let navigate = useNavigate();
+  let [spinnerloading, setSpinnerLoading] = useState(false);
+
   
   useEffect(() => {
     setCurrentImage(product?.images ? product?.images[0] : '');
   }, [product]);
 
- 
   let addToCartHandler = async (req, res) =>
   {
     try {
+      setSpinnerLoading(true);
       let response = await axios.post(BASE_URL + "/cart/add-product/" + product._id, {}, { withCredentials: true });
-      toast.success("Product added to Cart successfully");
+      toast.success(response.data.message);
+      console.log(response.data);
+      if(response.status === 200)
+    {  dispatch(addItemToCartHandler(response.data.cart));}
     } catch (error)
     {
       console.log(error);
       toast.error("Failed to add product to cart");
+    } finally {
+      setSpinnerLoading(false);
     }
   }
 
@@ -62,7 +72,9 @@ function SingleProductDetail({product,loading}) {
       {/* Heading */}
 
       {/* Product Image*/}
-
+      {spinnerloading? <div className="absolute inset-0  flex justify-center items-center z-10">
+          <Spinner />
+        </div>:''}
       {loading ? (
         <ProductDetailSkeleton />
       ) : !loading && product ? (

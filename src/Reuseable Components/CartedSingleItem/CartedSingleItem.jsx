@@ -1,35 +1,88 @@
 import { useNavigate } from 'react-router-dom';
-
 import { useEffect, useState } from 'react';
-import { useCartStorage } from '../../Contexts/ShoppingCart';
+import axios from 'axios';
+import { BASE_URL } from '@/utils/constants';
+import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { product_Quantity_Updation_Handler, product_Selected_For_Purchase_Handler, removeItemFromCartHandler, userProductsloadingHandler } from '@/Redux/Slices/userProducts';
 
 
 function CartedSingleItem({ element })
 {
   if (!element) return;
-  let { removeFromCart, totalAmountHandler, updataCartedProduct } =
-    useCartStorage();
-
-  let [itemQuantity, setItemQuantity] = useState(element.itemQuantity);
+  let [itemQuantity, setItemQuantity] = useState(element.quantity);
 
   let navigate = useNavigate();
+  let dispatch = useDispatch();
 
+  useEffect(() =>
+  {
+    setItemQuantity(element?.quantity);
+  }, [element])
+  
+  //========================================UPDATE THE PRODUCT QUANTITY=============================
+
+  let updateProductQuantityHandler = async () =>
+  {
+    if (itemQuantity < 1) return;
+    try {
+      dispatch(userProductsloadingHandler(true));
+      await axios.patch(BASE_URL + `/cart/update-quantity/${element.product._id}?quantity=${itemQuantity}`,{},{withCredentials:true});
+      let productId = element.product._id;
+      console.log(productId);
+      dispatch(product_Quantity_Updation_Handler({productId, itemQuantity}));
+    } catch (error)
+    {
+      console.log(error);
+      toast.error("Something went wrong!");
+    } finally {
+      dispatch(userProductsloadingHandler(false));
+    }
+  }
+
+  //================================HANDLING THE PRODUCT QUANTITY AND CALLING THE API=============
   useEffect(() => {
     let value = itemQuantity;
     if (!value == element.itemQuantity) return;
-    updataCartedProduct('itemQuantity', value, element.id);
+    updateProductQuantityHandler();
   }, [itemQuantity]);
 
-  //==========Effect to update the checkbox whenever checkbox is updated
-  let checkBoxHandler = () => {
-    let value = !element.itemSelectedTobuy;
-    console.log(value);
-    updataCartedProduct('checkbox', value, element.id);
+
+  //===============================TO  REMOVE THE PRODUCT FROM THE LIST=================
+  let removeItem = async () => {
+    try {
+      dispatch(userProductsloadingHandler(true));
+
+      let respnose = axios.patch(BASE_URL + "/cart/delete-Product/" + element.product._id, {}, { withCredentials: true });
+      dispatch(removeItemFromCartHandler(element.product._id));
+      toast.success("Product removed From Cart Successfully!");
+    }catch(error)
+    {
+      console.log(error);
+      toast.error("Something went wrong!");
+      throw new Error(error.message);
+    } finally {
+      dispatch(userProductsloadingHandler(false));
+
+    }
   };
 
-  let removeItem = async () => {
-    await removeFromCart(element.id);
+  //===============================TO UPDATE THE STATUS EITHER SELECTED TO BUY OR NOT==================
+  let checkBoxHandler =async () => {
+    let value = !element.selectedForPurchase;
+    try {
+      dispatch(userProductsloadingHandler(true));
+      await axios.patch(BASE_URL + `/cart/update-selected-to-purchase/${element.product._id}`,{},{withCredentials:true});
+      dispatch(product_Selected_For_Purchase_Handler(element.product._id));
+    } catch (error)
+    {
+      toast.error("Something went wrong!");
+    } finally {
+      dispatch(userProductsloadingHandler(false));
+    }
   };
+  if (!element?.product) return;
+  let { name, price, images ,_id} = element.product;
 
   return (
     <>
@@ -40,10 +93,11 @@ function CartedSingleItem({ element })
           {/* --------Check Box */}
           <div>
             <input
-              checked={element.itemSelectedTobuy}
+              checked={element?.selectedForPurchase}
               onChange={checkBoxHandler}
               className="me-2 cursor-pointer"
-              type="checkbox"
+                type="checkbox"
+                
             />
           </div>
         </div>
@@ -55,11 +109,11 @@ function CartedSingleItem({ element })
               className={`w-[100px] h-[100px] cursor-pointer`}
               onClick={() =>
                 navigate(
-                  `/ProductDetails?itemId=${element.regularItemId}&quantity=${element.itemQuantity}`
+                  `/ProductDetails?itemId=${_id}&quantity=${element.quantity}`
                 )
               }
-              src={element.imageURL}
-              alt={element.name}
+              src={images[0]}
+              alt={name}
             />
           </div>
         </div>
@@ -72,7 +126,7 @@ function CartedSingleItem({ element })
               className={` text-[15px] mt-0 md:text-[20px] font-medium`}
               onClick={() =>
                 navigate(
-                  `/ProductDetails?itemId=${element.regularItemId}&quantity=${element.itemQuantity}`
+                  `/ProductDetails?itemId=${_id}&quantity=${element.quantity}`
                 )
               }
             >
@@ -81,7 +135,7 @@ function CartedSingleItem({ element })
             <div className=" flex flex-col h-[100%] justify-between ">
               {/* Quantity */}
               <label htmlFor="" className={`  md:hidden font-medium`}>
-                Price:${element.price}
+                Price:${price}
               </label>
 
               <div id="quantity" className="flex md:flex-col md:justify-end justify-between h-full  w-[150px]">
@@ -161,12 +215,7 @@ function CartedSingleItem({ element })
                
               </div>
             </div></td>
-      <td className='hidden  md:table-cell font-semibold'>{element.price * element.itemQuantity}</td>
-       
-    
-
-      {/*==============================For large size screen */}
-      
+      <td className='hidden  md:table-cell font-semibold'>{price}</td>
     </>
   );
 }

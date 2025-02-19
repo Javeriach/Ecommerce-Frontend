@@ -19,19 +19,24 @@ import LoginIcon from '@mui/icons-material/Login';
 import ProductSearch from '@/AppComponents/ProductsSearch/ProductSearch';
 import ESLogo from '../../Images/ESLogo.png';
 import Aos from 'aos';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { BASE_URL } from '@/utils/constants';
 import toast from 'react-hot-toast';
+import { removeUser } from '@/Redux/Slices/userSlice';
+import { fetchedCartedItemsHandler, fetchedWishedItemsHandler } from '@/Redux/Slices/userProducts';
+import { ListOrdered } from 'lucide-react';
 
 function NavbarShowCase() {
-  // let { addToCartList, wishlist } = useCartStorage();
-  let user = useSelector((store) => store.user);
-  
+
+  let { products: cartedProducts } = useSelector(store => store.userProducts.cartedItems);
+  let {products:wishlist} = useSelector(store =>store.userProducts.wishedItems);
+  let user = useSelector((store) => store.user);  
   let [navDialogue, setNavDialogue] = useState(false);
   let [toggleDropDown, setToggleDropDown] = useState(false);
   let dropdownBtnRef = useRef();
   let navigate = useNavigate();
+  let dispatch = useDispatch();
 
   useEffect(() => {
     Aos.init({ duration: 100 });
@@ -40,7 +45,6 @@ function NavbarShowCase() {
   console.log(user);
   // --------Handlers
   let LogoutHandler = async () => {
-    if (!user) return;
     try {
       await axios.post(
         BASE_URL + '/auth/logout',
@@ -50,6 +54,8 @@ function NavbarShowCase() {
         }
       );
       dispatch(removeUser());
+      dispatch(fetchedCartedItemsHandler([]));
+      dispatch(fetchedWishedItemsHandler([]));
       navigate('/login');
       toast.success('Logout Successfully!!');
     } catch (err) {
@@ -110,7 +116,7 @@ function NavbarShowCase() {
             <label
               className={` bg-blue-700 rounded-[20px] w-[20px] text-white text-[15px] absolute  text-center mb-2`}
             >
-              {/* {wishlist.length} */}
+              {wishlist?.length}
             </label>
           </div>
         </Link>
@@ -121,7 +127,7 @@ function NavbarShowCase() {
             <label
               className={` bg-blue-700 rounded-[20px] w-[20px] ml-0 text-white text-[15px] absolute  text-center mb-2`}
             >
-              {/* {addToCartList.length} */}
+              {cartedProducts?.length}
             </label>
           </div>
         </Link>
@@ -155,7 +161,7 @@ function NavbarShowCase() {
                         onClick={() => setToggleDropDown((ps) => !ps)}
                         className="text-lg flex justify-around"
                       >
-                        {/* {currentUserDetails?.name?.split(' ')[0]} */}
+                        {/* {user?.name?.split(' ')[0]} */}
 
                         <DashboardIcon />
                         <label className="ms-[10px] text-lg flex justify-around">
@@ -166,6 +172,18 @@ function NavbarShowCase() {
                     <div className="h-[1px] bg-slate-600 w-[100%]"> </div>{' '}
                   </>
                 }
+                
+                  <Link to={"/myorders"} className=" hover:bg-gray-300 cursor-pointer w-[100%] px-3 h-8 flex items-center ">
+                  <ListOrdered/>
+                  <label
+                    // onClick={LogoutHandler}
+                    className="ms-[10px] text-lg flex justify-around"
+                  >
+                   My Orders
+                  </label>
+                </Link>
+
+
                 <div className=" hover:bg-gray-300 cursor-pointer w-[100%] px-3 h-8 flex items-center ">
                   <LogoutIcon />
                   <label
@@ -174,7 +192,8 @@ function NavbarShowCase() {
                   >
                     LOGOUT
                   </label>
-                </div>
+                  </div>
+                  
               </div>
             )}
           </div>
@@ -283,7 +302,7 @@ function NavbarShowCase() {
             <div className="h-[1px] bg-black"></div>
 
             {/* ------Logged in user */}
-            {currentUserDetails.uid && (
+            {user?._id && (
               <Link
                 className="font-medium cursor-pointer m-1 p-3 py-2 flex items-center justify-between hover:bg-gray-50 rounded-lg"
                 to="/Login"
@@ -291,7 +310,7 @@ function NavbarShowCase() {
                 <div className="flex items-center h-full w-full">
                   <PersonIcon sx={{ fontSize: 35 }} />
                   <label className="text-[20px] mt-1 ml-2">
-                    {currentUserDetails?.name?.split(' ')[0]}
+                    {user?.firstName}
                   </label>
                 </div>
               </Link>
@@ -301,7 +320,7 @@ function NavbarShowCase() {
 
             <div className="">
               <button className="bg-blue-800 block w-full  text-left pl-[30px] hover:bg-white hover:text-black">
-                {!currentUserDetails.uid ? (
+                {!user._id ? (
                   <Link
                     className="font-medium cursor-pointer m-3   flex items-center justify-between  rounded-lg"
                     to="/Login"

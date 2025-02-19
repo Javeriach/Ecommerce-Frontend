@@ -18,15 +18,18 @@ import {
   SheetDescription,
 } from '../../Components/ui/sheet';
 
-// import {  } from '@/Contexts/EShopDataProvider';
 import { useEffect, useState } from 'react';
 import SearchedSingleItem from './SearchedSingleItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { searchedProductsListHandler } from '@/Redux/Slices/eshopSlice';
 
 function ProductSearch() {
-  let { EshopData, setShopData} = useState([]);
+  let { products} = useSelector(store=>store.eshopData);
   let [itemToSearch, setItemToSearch] = useState('');
   let [filteredData, setFilteredData] = useState([]);
   let [displayItems, setDisplayItems] = useState([]);
+  let dispatch = useDispatch();
+  
 
   useEffect(() => {
     if (!itemToSearch) {
@@ -35,13 +38,13 @@ function ProductSearch() {
       return;
     }
 
-    let data = EshopData.filter((item) => {
+    let data = products.filter((item) => {
       if (item?.name.toLowerCase().includes(itemToSearch.toLowerCase()))
         return item;
     });
 
     setDisplayItems(data.slice(0, 2));
-    if (data.length > 2) SearchedProductsSetter(data);
+    if (data.length > 2) dispatch(searchedProductsListHandler(data));
     setFilteredData(data);
   }, [itemToSearch]);
 

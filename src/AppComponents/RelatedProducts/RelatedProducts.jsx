@@ -25,11 +25,7 @@ function RelatedProducts({loading,relatedProducts}) {
           <LatestProducts relatedProducts={relatedProducts} />
         </>
       ) : (
-        <div className="h-[200px] relative w-screen flex justify-center m-3 ">
-          <p className=" w-[80%]  text-center text-bold  mt-[30px] ">
-            Related Products Fetching Failed...
-          </p>
-        </div>
+        ""
       )}
     </div>
   );
