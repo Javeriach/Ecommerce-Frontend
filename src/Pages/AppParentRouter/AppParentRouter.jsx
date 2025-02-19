@@ -52,7 +52,7 @@ function AppParentRouter() {
   }, []);
 
   return (
-    <div className="md:pt-12 pt-14 ">
+    <div className="md:pt-12 pt-14 overflow-x-hidden">
       <NavbarShowCase />
 
       <div className={`fixed z-[1000] flex w-[100%] justify-center mt-[120px]`}>

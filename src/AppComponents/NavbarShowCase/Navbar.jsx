@@ -94,7 +94,7 @@ function NavbarShowCase() {
   });
 
   return (
-    <nav className="fixed w-full  z-[1000] top-[0%] flex justify-between items-center bg-white py-3 md:pe-12">
+    <nav className="fixed w-full  z-[1000] top-[0%] flex justify-between items-center bg-white py-3 md:pe-12 overflow-x-hidden">
       <Link className="flex gap-1 items-center text-[30px] font-[600]" to={'/'}>
         <img className="w-[40px] h-[40px]  ml-6 rounded-[50px]" src={ESLogo} />
         EShop
@@ -214,7 +214,7 @@ function NavbarShowCase() {
       {navDialogue && (
         <div
           data-aos="fade-right"
-          className=" fixed bg-white inset-0 z-[1000] p-3  md:hidden "
+          className=" fixed bg-white inset-0 z-[1000] p-3  md:hidden overflow-x-hidden"
           onClick={() => setNavDialogue(false)}
         >
           <div id="nav-bar" className=" flex justify-between">

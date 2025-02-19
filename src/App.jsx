@@ -7,28 +7,32 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from 'bootstrap';
 import './App.css';
 import HomePage from './Pages/HomePage/HomePage';
-import ProductsDetails from './Pages/ProductDetails/ProductsDetails';
-import AddToCartPage from './Pages/AddToCartPage/AddToCartPage';
 import LoginPage from './Pages/LoginPage/LoginPage';
 import CatogoryStore from './Pages/CategoriesStore/CatogoryStore';
-import Dashboard from './Pages/DashboardPage/Dashboard';
-import DashboardProducts from './AppComponents/Dashboard/DashboardProducts/DashboardProducts';
 // import DashboardUsers from './AppComponents/Dashboard/DashboardUsers/DashboardUsers';
 // import DashboardOrders from './AppComponents/Dashboard/DashboardOrders/DashboardOrders';
 // import Cancel from './Pages/CancelPaymentPage/Cancel';
 // import Sucess from './Pages/SuccessPage/Sucess';
-import WishlistPage from './Pages/WishlistPage/WishlistPage';
 import AppParentRouter from './Pages/AppParentRouter/AppParentRouter';
 // import { OrdersUsersContext } from './Contexts/OrdersUsersContext';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import store from './Redux/Store';
-import AllResultProducts from './Pages/AllResultProducts/AllResultProducts';
-import Checkout from './Pages/CheckOutPage/Checkout';
-import MyOrdersPage from './Pages/MyOrders/MyOrders';
+import{ lazy,Suspense} from "react";
+
 // import ProtectedRoute from './ProtectedRoute/ProtectedRoute';
 
+
 function App() {
+  const ProductsDetails = lazy(() => import('./Pages/ProductDetails/ProductsDetails'));
+  const Checkout = lazy(() => import('./Pages/CheckOutPage/Checkout'));
+  const  MyOrdersPage = lazy(() => import('./Pages/MyOrders/MyOrders'));
+  const AllResultProducts = lazy(() => import('./Pages/AllResultProducts/AllResultProducts'));
+  const WishlistPage= lazy(() => import('./Pages/WishlistPage/WishlistPage'));
+  const DashboardProducts=lazy(() => import('./AppComponents/Dashboard/DashboardProducts/DashboardProducts'));
+  const Dashboard = lazy(() => import('./Pages/DashboardPage/Dashboard'));
+  const AddToCartPage=lazy(() => import('./Pages/AddToCartPage/AddToCartPage'));
+
   return (
     <Provider store={store}>
       <Toaster />
@@ -43,43 +47,54 @@ function App() {
 
             <Route
               path="/Categories/:categoryName/:categoryId/Product"
-              element={<ProductsDetails />}
+              element={<Suspense fallback={<h1>Loading...</h1>}><ProductsDetails /></Suspense>}
             />
 
             {/* Latest Products route */}
-            <Route path="/latestProducts" element={<ProductsDetails />} />
+            <Route path="/latestProducts" element={<Suspense fallback={<h1>Loading...</h1>}> <ProductsDetails /></Suspense>} />
 
             {/* ====================================WishList==================================== */}
-            <Route path="/wishlist" element={<WishlistPage />}></Route>
             <Route
-              path="/wishlist/ProductDetails"
-              element={<ProductsDetails />}
-            />
+  path="/wishlist"
+  element={
+    <Suspense fallback={<h1>Loading...</h1>}>
+      <WishlistPage />
+    </Suspense>
+  }
+/>
+<Route
+  path="/wishlist/ProductDetails"
+  element={
+    <Suspense fallback={<h1>Loading...</h1>}>
+      <ProductsDetails />
+    </Suspense>
+  }
+/>
             {/* ====================================Add to Cart==================================== */}
 
-            <Route path="/AddToCart" element={<AddToCartPage />} />
+            <Route path="/AddToCart" element={<Suspense fallback={<h1>Loading...</h1>}><AddToCartPage /></Suspense>} />
             {/* ====================================My Orders==================================== */}
-            <Route path="/myorders" element={<MyOrdersPage/>} />
+            <Route path="/myorders" element={<Suspense fallback={<h1>Loading...</h1>}> <MyOrdersPage/></Suspense>} />
  
             <Route path="/login" element={<LoginPage />} />
 
             <Route path="/ProductDetails" element={<ProductsDetails />}></Route>
-            <Route path="/Order-products" element={<Checkout />}></Route>
+            <Route path="/Order-products" element={<Suspense fallback={<h1>Loading...</h1>}> <Checkout /></Suspense>}></Route>
             {/* <Route path="/cancel" element={<Cancel />} /> */}
             {/* <Route path={`/success`} element={<Sucess />} /> */}
 
-            <Route path="/AllResults" element={<AllResultProducts />} />
+            <Route path="/AllResults" element={<Suspense fallback={<h1>Loading...</h1>}><AllResultProducts /> </Suspense>} />
           </Route>
 
           <Route
             path="/Admin-Dashboard"
             element={
               // <ProtectedRoute>
-              <Dashboard />
+             <Suspense fallback={<h1>Loading...</h1>}>  <Dashboard /></Suspense> 
               // </ProtectedRoute>
             }
           >
-            <Route index element={<DashboardProducts />}></Route>
+            <Route index element={<Suspense fallback={<h1>Loading...</h1>}> <DashboardProducts /></Suspense> }></Route>
             {/* <Route
                       path="/Admin-Dashboard/Users"
                       element={<DashboardUsers />}
