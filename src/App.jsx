@@ -11,8 +11,8 @@ import LoginPage from './Pages/LoginPage/LoginPage';
 import CatogoryStore from './Pages/CategoriesStore/CatogoryStore';
 // import DashboardUsers from './AppComponents/Dashboard/DashboardUsers/DashboardUsers';
 // import DashboardOrders from './AppComponents/Dashboard/DashboardOrders/DashboardOrders';
-// import Cancel from './Pages/CancelPaymentPage/Cancel';
-// import Sucess from './Pages/SuccessPage/Sucess';
+import Cancel from './Pages/CancelPaymentPage/Cancel';
+import Sucess from './Pages/SuccessPage/Sucess';
 import AppParentRouter from './Pages/AppParentRouter/AppParentRouter';
 // import { OrdersUsersContext } from './Contexts/OrdersUsersContext';
 import { Toaster } from 'react-hot-toast';
@@ -80,8 +80,8 @@ function App() {
 
             <Route path="/ProductDetails" element={<ProductsDetails />}></Route>
             <Route path="/Order-products" element={<Suspense fallback={<h1>Loading...</h1>}> <Checkout /></Suspense>}></Route>
-            {/* <Route path="/cancel" element={<Cancel />} /> */}
-            {/* <Route path={`/success`} element={<Sucess />} /> */}
+            <Route path="/cancel" element={<Cancel />} />
+            <Route path={`/success`} element={<Sucess />} />
 
             <Route path="/AllResults" element={<Suspense fallback={<h1>Loading...</h1>}><AllResultProducts /> </Suspense>} />
           </Route>

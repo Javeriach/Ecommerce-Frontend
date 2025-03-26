@@ -8,6 +8,8 @@ function OrderSummery() {
   let { products } = useSelector((store) => store.userProducts.cartedItems);
   let [itemsToPurchase, setItemsToPurchase] = useState([]);
   let [amount, setTotalAmount] = useState(0);
+  let  currentOrderDetails  = useSelector(store => store.userorders.currentOrderDetails);
+  console.log(currentOrderDetails);
 
   useEffect(() => {
     let filteredItems = products?.filter((item) => {
@@ -22,12 +24,20 @@ function OrderSummery() {
     setTotalAmount(tempAmount);
   }, [products]);
 
-  const makePayment = async()=>{
-    const stripe = await loadStripe("ENTER YOUR PUBLISHABLE KEY");
+  const makePayment = async () => {
+    
+    const stripe = await loadStripe("pk_test_51PSwntA6aVtMiEAWUiwJNkrxhzYksxPg9ynCvgsLm6q7StPWXIrDBYmAGKjcZHWuQPrpFbE7ElFyzf2mXOOgbtj700ks4dYXGs");
 
-    const response = await axios.post(BASE_URL + "/api/payment-session",{cartedProducts:itemsToPurchase},{withCredentials:true});
+    let body = {
+      products: itemsToPurchase,
+      address: currentOrderDetails
+    };
+
+   
+    const response = await axios.post(BASE_URL + "/checkout", body, { withCredentials: true });
+    console.log(response);
     const result = stripe.redirectToCheckout({
-        sessionId:response.id
+        sessionId:response.data.id
     });
     
     
@@ -72,7 +82,7 @@ function OrderSummery() {
           <span>${amount + 250}</span>
         </div>
       </div>
-      <button className="w-full bg-yellow-500 text-white font-semibold py-2 rounded-lg mt-4 hover:bg-yellow-600">
+      <button onClick={makePayment} className="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg mt-4 hover:bg-blue-600">
         PLACE ORDER
       </button>
     </div>
